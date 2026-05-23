@@ -1,0 +1,287 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Commit+Mono&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   IA FIELD NOTES — Design System v2
+   "The Practitioner's Intelligence Briefing"
+   ============================================ */
+
+:root {
+  /* Light Mode */
+  --bg-base: #F7F5F2;
+  --bg-surface: #FFFFFF;
+  --bg-raised: #F0EDE8;
+  --bg-hero-glow-1: rgba(37, 99, 235, 0.08);
+  --bg-hero-glow-2: rgba(5, 150, 105, 0.06);
+
+  --text-primary: #111008;
+  --text-secondary: #615E58;
+  --text-meta: #9A9690;
+
+  --accent: #2563EB;
+  --accent-hover: #1D4ED8;
+  --accent-subtle: rgba(37, 99, 235, 0.08);
+
+  --border: rgba(17, 16, 8, 0.08);
+  --border-strong: rgba(17, 16, 8, 0.14);
+
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.03);
+  --shadow-card-hover: 0 4px 16px rgba(0,0,0,0.06), 0 0 0 1px rgba(37,99,235,0.12);
+
+  --nav-bg: rgba(247, 245, 242, 0.85);
+
+  --callout-tip-bg: #ECFDF5;
+  --callout-tip-border: #A7F3D0;
+  --callout-note-bg: #EFF6FF;
+  --callout-note-border: #BFDBFE;
+  --callout-warn-bg: #FFFBEB;
+  --callout-warn-border: #FDE68A;
+}
+
+[data-theme="dark"] {
+  --bg-base: #12100F;
+  --bg-surface: #1A1816;
+  --bg-raised: #221F1C;
+  --bg-hero-glow-1: rgba(96, 165, 250, 0.16);
+  --bg-hero-glow-2: rgba(52, 211, 153, 0.11);
+
+  --text-primary: #ECEBE7;
+  --text-secondary: #9B9790;
+  --text-meta: #645F5B;
+
+  --accent: #60A5FA;
+  --accent-hover: #93C5FD;
+  --accent-subtle: rgba(96, 165, 250, 0.08);
+
+  --border: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.1);
+
+  --shadow-card: none;
+  --shadow-card-hover: none;
+
+  --nav-bg: rgba(18, 16, 15, 0.88);
+
+  --callout-tip-bg: rgba(52, 211, 153, 0.06);
+  --callout-tip-border: rgba(52, 211, 153, 0.2);
+  --callout-note-bg: rgba(96, 165, 250, 0.06);
+  --callout-note-border: rgba(96, 165, 250, 0.2);
+  --callout-warn-bg: rgba(251, 191, 36, 0.06);
+  --callout-warn-border: rgba(251, 191, 36, 0.2);
+}
+
+/* ===== BASE STYLES ===== */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 18px;
+  line-height: 1.68;
+  color: var(--text-primary);
+  background-color: var(--bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+code, pre {
+  font-family: 'Commit Mono', monospace;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.12s ease;
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 7rem 2rem 6rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: 15%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(ellipse, var(--bg-hero-glow-1), transparent 70%);
+  pointer-events: none;
+  filter: blur(60px);
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(ellipse, var(--bg-hero-glow-2), transparent 70%);
+  pointer-events: none;
+  filter: blur(80px);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-stamp {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-meta);
+  margin-bottom: 2rem;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+  color: var(--text-primary);
+}
+
+.hero h1 .accent-word {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.hero .tagline {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+  max-width: 520px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 5rem 1.5rem 4rem;
+  }
+
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero .tagline {
+    font-size: 1rem;
+  }
+}
+
+/* ===== DARK MODE HOVER OVERRIDES ===== */
+[data-theme="dark"] .note-card:hover,
+[data-theme="dark"] .field-note-card:hover {
+  border-color: rgba(96, 165, 250, 0.3);
+  background: var(--bg-raised);
+}
+
+[data-theme="dark"] .category-tile:hover {
+  border-color: rgba(96, 165, 250, 0.3);
+  background: var(--bg-raised);
+}
+
+/* ===== UTILITY: FADE IN ON SCROLL ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ===== SECTION LABEL ===== */
+.section-label {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-label span {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-meta);
+  white-space: nowrap;
+}

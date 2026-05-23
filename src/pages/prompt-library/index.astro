@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionDivider from '../../components/SectionDivider.astro';
+import FieldNoteCard from '../../components/FieldNoteCard.astro';
+
+const SECTION_TITLE = 'Prompt Library';
+const SECTION_DESC = 'Tested prompts with context on when and how to use them effectively.';
+const COLLECTION_NAME = 'prompt-library';
+
+let entries: any[] = [];
+try {
+  const { getCollection } = await import('astro:content');
+  const all = await getCollection(COLLECTION_NAME);
+  entries = all.sort((a: any, b: any) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+} catch {
+  // Empty collection
+}
+---
+
+<BaseLayout title={`${SECTION_TITLE} — IA Field Notes`} description={SECTION_DESC}>
+  <section style="max-width: 1280px; margin: 0 auto; padding: 6rem 2rem 2rem;">
+    <p style="font-family: 'Commit Mono', monospace; font-size: 0.65rem; color: var(--text-meta); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem;">
+      {SECTION_TITLE}
+    </p>
+    <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 600; line-height: 1.2; color: var(--text-primary);">
+      {SECTION_TITLE}
+    </h1>
+    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.75rem; max-width: 600px;">
+      {SECTION_DESC}
+    </p>
+  </section>
+
+  <SectionDivider label={`All ${SECTION_TITLE}`} />
+
+  <section style="max-width: 1280px; margin: 0 auto; padding: 0 2rem 4rem;">
+    {entries.length > 0 ? (
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem;">
+        {entries.map((entry: any) => (
+          <FieldNoteCard
+            title={entry.data.title}
+            slug={entry.slug}
+            date={entry.data.date instanceof Date ? entry.data.date.toISOString() : entry.data.date}
+            topic={entry.data.topic}
+            description={entry.data.description}
+            collection={COLLECTION_NAME}
+          />
+        ))}
+      </div>
+    ) : (
+      <div style="text-align: center; padding: 3rem 1rem; border: 1px dashed var(--border); border-radius: 12px;">
+        <p style="font-family: 'Commit Mono', monospace; font-size: 0.75rem; color: var(--text-meta); letter-spacing: 0.05em;">
+          SECTION INITIALIZED · AWAITING ENTRIES
+        </p>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.75rem;">
+          Content for this section is being drafted. Check back soon.
+        </p>
+      </div>
+    )}
+  </section>
+</BaseLayout>

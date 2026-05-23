@@ -1,0 +1,49 @@
+---
+interface Props {
+  title?: string;
+  accentWord?: string;
+  subtitle?: string;
+  stampText?: string;
+  showCTA?: boolean;
+  primaryCTA?: { text: string; href: string };
+  secondaryCTA?: { text: string; href: string };
+}
+
+const {
+  title = "Intelligence,",
+  accentWord = "amplified",
+  subtitle = "Practical observations and applied frameworks for teams putting AI to work in the enterprise.",
+  stampText = "Practitioner Intelligence · Est. 2026",
+  showCTA = true,
+  primaryCTA = { text: "Explore Use Cases", href: "/use-cases/" },
+  secondaryCTA = { text: "Browse Guides", href: "/guides/" },
+} = Astro.props;
+---
+
+<section class="hero">
+  <div class="hero-content">
+    {stampText && (
+      <p class="hero-stamp">{stampText}</p>
+    )}
+
+    <h1>
+      {title}<br><span class="accent-word">{accentWord}</span>
+    </h1>
+
+    {subtitle && (
+      <p class="tagline">{subtitle}</p>
+    )}
+
+    {showCTA && (
+      <div class="hero-ctas">
+        <a href={primaryCTA.href} class="btn btn-primary">
+          {primaryCTA.text}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href={secondaryCTA.href} class="btn btn-ghost">
+          {secondaryCTA.text}
+        </a>
+      </div>
+    )}
+  </div>
+</section>

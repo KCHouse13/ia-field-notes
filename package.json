@@ -1,0 +1,37 @@
+{
+  "name": "ia-field-notes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KCHouse13/ia-field-notes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/KCHouse13/ia-field-notes/issues"
+  },
+  "homepage": "https://github.com/KCHouse13/ia-field-notes#readme",
+  "dependencies": {
+    "@astrojs/mdx": "^5.0.6",
+    "@astrojs/sitemap": "^3.7.2",
+    "@astrojs/tailwind": "^6.0.2",
+    "@tailwindcss/typography": "^0.5.19",
+    "astro": "^6.3.7",
+    "pagefind": "^1.5.2",
+    "tailwindcss": "^3.4.19"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}

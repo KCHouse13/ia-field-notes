@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import SectionDivider from '../components/SectionDivider.astro';
+import FieldNoteCard from '../components/FieldNoteCard.astro';
+import CategoryTile from '../components/CategoryTile.astro';
+
+// Try to load field notes collection if available
+let fieldNotes: any[] = [];
+try {
+  const { getCollection } = await import('astro:content');
+  const allNotes = await getCollection('field-notes');
+  fieldNotes = allNotes
+    .sort((a: any, b: any) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+    .slice(0, 6);
+} catch {
+  // Collection empty or not configured
+}
+
+const hasNotes = fieldNotes.length > 0;
+---
+
+<BaseLayout
+  title="IA Field Notes — Intelligence, amplified"
+  description="Practical observations and applied frameworks for teams putting AI to work in the enterprise."
+>
+  <Hero />
+
+  <!-- Intro -->
+  <section class="intro">
+    <p>
+      <span class="highlight">IA = Intelligence Amplification.</span>
+      AI embedded in your workflow to take care of the routine, highlight what matters, and create space for higher&#8209;value work.
+    </p>
+    <p style="margin-top: 1rem;">
+      Explore real scenarios, walkthroughs, and curated updates to help you translate AI into practical value in your day-to-day work.
+    </p>
+  </section>
+
+  <!-- Latest Field Notes (only shown when content exists) -->
+  {hasNotes && (
+    <>
+      <SectionDivider label="Latest from the field" />
+      <section class="notes-section">
+        <div class="notes-grid">
+          {fieldNotes.map((note: any) => (
+            <FieldNoteCard
+              title={note.data.title}
+              slug={note.slug}
+              date={note.data.date instanceof Date ? note.data.date.toISOString() : note.data.date}
+              topic={note.data.topic}
+              description={note.data.description}
+              collection="field-notes"
+            />
+          ))}
+        </div>
+      </section>
+    </>
+  )}
+
+  <!-- Browse by Category -->
+  <SectionDivider label="Explore by type" />
+
+  <section class="categories-section">
+    <div class="categories-grid">
+      <CategoryTile
+        title="Use Cases"
+        description="Real-world scenarios showing how AI, Copilot, and agents solve business problems across roles and industries."
+        href="/use-cases/"
+        icon="◆"
+        countText="12 scenarios →"
+      />
+      <CategoryTile
+        title="Guides"
+        description="Step-by-step walkthroughs for getting value from Microsoft 365 Copilot, agents, and adjacent tools."
+        href="/guides/"
+        icon="▲"
+        countText="8 guides →"
+      />
+      <CategoryTile
+        title="News & Updates"
+        description="Curated, plain-language summaries of what changed in the ecosystem and why it matters for practitioners."
+        href="/news/"
+        icon="●"
+        countText="Latest: May 20 →"
+      />
+    </div>
+  </section>
+
+  <!-- Scroll Animation Script -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</BaseLayout>
+
+<style>
+  .intro {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem;
+    text-align: center;
+  }
+
+  .intro p {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+
+  .intro .highlight {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .notes-section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .categories-section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .notes-grid { grid-template-columns: 1fr; }
+    .categories-grid { grid-template-columns: 1fr; }
+  }
+</style>

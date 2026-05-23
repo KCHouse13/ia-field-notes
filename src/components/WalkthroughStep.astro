@@ -1,0 +1,26 @@
+---
+interface Props {
+  number: number;
+  title: string;
+}
+
+const { number, title } = Astro.props;
+---
+
+<div class="flex gap-4 sm:gap-5 my-8">
+  <div
+    class="shrink-0 flex items-center justify-center w-9 h-9 rounded-full text-white text-sm font-semibold"
+    style="background-color: var(--accent);"
+    aria-hidden="true"
+  >
+    {number}
+  </div>
+  <div class="flex-1 min-w-0">
+    <h3 class="text-lg font-semibold mb-2" style="font-family: 'Cormorant Garamond', Georgia, serif; color: var(--text-primary);">
+      {title}
+    </h3>
+    <div class="text-sm leading-relaxed" style="color: var(--text-primary);">
+      <slot />
+    </div>
+  </div>
+</div>

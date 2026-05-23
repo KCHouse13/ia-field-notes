@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About — IA Field Notes" description="What this site is, who writes it, and why it exists.">
+  <article style="max-width: 720px; margin: 0 auto; padding: 6rem 2rem 4rem;">
+    <header style="margin-bottom: 3rem;">
+      <p style="font-family: 'Commit Mono', monospace; font-size: 0.65rem; color: var(--text-meta); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem;">
+        About This Project
+      </p>
+      <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; line-height: 1.2; color: var(--text-primary);">
+        A Practitioner's <em style="color: var(--accent);">Working Notebook</em>
+      </h1>
+    </header>
+
+    <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.75;">
+      <p>
+        IA Field Notes is an independent editorial site focused on practical AI adoption.
+        It documents real observations from embedding AI tools — particularly GitHub Copilot
+        and Microsoft's AI ecosystem — into daily professional work.
+      </p>
+
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--text-primary); margin-top: 2.5rem; margin-bottom: 1rem;">
+        What This Is
+      </h2>
+      <ul style="list-style: none; padding: 0;">
+        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">📓 Field notes from daily AI-assisted work</li>
+        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">🎯 Structured use case breakdowns</li>
+        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">📋 Step-by-step workflow guides</li>
+        <li style="padding: 0.5rem 0; border-bottom: 1px solid var(--border);">💬 Tested prompt patterns</li>
+        <li style="padding: 0.5rem 0;">📡 Timely analysis of AI updates</li>
+      </ul>
+
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--text-primary); margin-top: 2.5rem; margin-bottom: 1rem;">
+        What This Isn't
+      </h2>
+      <p>
+        This isn't a product blog, marketing site, or official documentation. It's one practitioner's
+        honest observations — including what doesn't work, what's overhyped, and what's genuinely useful.
+        Think of it as lab notes, not press releases.
+      </p>
+
+      <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--text-primary); margin-top: 2.5rem; margin-bottom: 1rem;">
+        The Approach
+      </h2>
+      <p>
+        Every piece follows a consistent structure: observation, context, assessment. Field notes are
+        timestamped with ISO week notation and categorized by topic. The goal is content that remains
+        useful six months from now — not hot takes that expire in six days.
+      </p>
+
+      <div style="margin-top: 3rem; padding: 1.5rem; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; text-align: center;">
+        <p style="font-family: 'Commit Mono', monospace; font-size: 0.7rem; color: var(--text-meta); letter-spacing: 0.05em;">
+          Independent practitioner notes. Not official Microsoft guidance.
+        </p>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

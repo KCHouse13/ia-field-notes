@@ -1,0 +1,77 @@
+---
+interface Props {
+  type?: 'tip' | 'note' | 'warning';
+  title?: string;
+}
+const { type = 'note', title } = Astro.props;
+
+const icons: Record<string, string> = {
+  tip: '💡',
+  note: 'ℹ️',
+  warning: '⚠️',
+};
+
+const titles: Record<string, string> = {
+  tip: 'Tip',
+  note: 'Note',
+  warning: 'Warning',
+};
+---
+
+<div class={`callout callout-${type}`} role="note">
+  <div class="callout-header">
+    <span class="callout-icon">{icons[type]}</span>
+    <span class="callout-title">{title || titles[type]}</span>
+  </div>
+  <div class="callout-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .callout {
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border-left: 3px solid;
+  }
+
+  .callout-tip {
+    background: var(--callout-tip-bg);
+    border-color: var(--callout-tip-border);
+  }
+
+  .callout-note {
+    background: var(--callout-note-bg);
+    border-color: var(--callout-note-border);
+  }
+
+  .callout-warning {
+    background: var(--callout-warn-bg);
+    border-color: var(--callout-warn-border);
+  }
+
+  .callout-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .callout-icon {
+    font-size: 1rem;
+  }
+
+  .callout-title {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .callout-body {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+</style>
