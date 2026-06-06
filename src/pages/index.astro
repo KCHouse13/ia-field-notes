@@ -46,11 +46,12 @@ const hasNotes = fieldNotes.length > 0;
           {fieldNotes.map((note: any) => (
             <FieldNoteCard
               title={note.data.title}
-              slug={note.slug}
+              slug={note.id}
               date={note.data.date instanceof Date ? note.data.date.toISOString() : note.data.date}
               topic={note.data.topic}
-              description={note.data.description}
+              description={note.data.excerpt}
               collection="field-notes"
+              readTime={note.data.readTime}
             />
           ))}
         </div>

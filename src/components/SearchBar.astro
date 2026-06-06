@@ -1,19 +1,19 @@
 ---
 ---
 
-<button id="search-trigger" class="search-trigger" aria-label="Search (Cmd+K)" data-search-trigger>
+<button id="search-trigger" class="search-trigger" aria-label="Search (Ctrl+K)" data-search-trigger data-search-shortcut-button>
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="11" cy="11" r="8"/>
     <path d="m21 21-4.3-4.3"/>
   </svg>
   <span class="search-text">Search</span>
-  <kbd class="search-kbd">⌘K</kbd>
+  <kbd class="search-kbd" data-search-shortcut>Ctrl+K</kbd>
 </button>
 
 <!-- Search modal -->
 <div data-search-modal class="fixed inset-0 z-[100] hidden" role="dialog" aria-label="Search">
   <div class="absolute inset-0 bg-black/50" data-search-backdrop></div>
-  <div class="relative max-w-xl mx-auto mt-20 rounded-lg shadow-xl p-6" style="background-color: var(--bg-primary);">
+  <div class="relative max-w-xl mx-auto mt-20 rounded-lg shadow-xl p-6" style="background-color: var(--bg-surface);">
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-lg font-semibold" style="color: var(--text-primary);">Search</h2>
       <button type="button" class="p-1 rounded-md hover:opacity-70" style="color: var(--text-meta);" data-search-close aria-label="Close search">
@@ -24,13 +24,7 @@
     </div>
 
     <div id="pagefind-container">
-      <input
-        type="text"
-        placeholder="Search field notes…"
-        class="w-full px-4 py-2.5 rounded-md border text-sm outline-none focus:ring-2"
-        style="border-color: var(--border); color: var(--text-primary); background-color: var(--bg-primary);"
-        data-search-input
-      />
+      <p class="search-fallback" data-search-fallback>Search index loading...</p>
     </div>
   </div>
 </div>
@@ -68,6 +62,23 @@
     border: 1px solid var(--border);
   }
 
+  .search-fallback {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+  }
+
+  :global(.pagefind-ui) {
+    --pagefind-ui-primary: var(--accent);
+    --pagefind-ui-text: var(--text-primary);
+    --pagefind-ui-background: var(--bg-surface);
+    --pagefind-ui-border: var(--border-strong);
+    --pagefind-ui-tag: var(--bg-raised);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 6px;
+    --pagefind-ui-image-border-radius: 6px;
+    --pagefind-ui-font: 'Inter', sans-serif;
+  }
+
   @media (max-width: 640px) {
     .search-text {
       display: none;
@@ -82,12 +93,104 @@
   const modal = document.querySelector('[data-search-modal]');
   const closeBtn = document.querySelector('[data-search-close]');
   const backdrop = document.querySelector('[data-search-backdrop]');
-  const input = document.querySelector('[data-search-input]') as HTMLInputElement | null;
   const triggers = document.querySelectorAll('[data-search-trigger]');
+  let pagefindReady = false;
+  let pagefindLoading = false;
+
+  function getShortcutLabel() {
+    const platform = navigator.userAgentData?.platform ?? navigator.platform ?? '';
+    return /mac|iphone|ipad|ipod/i.test(platform) ? '⌘K' : 'Ctrl+K';
+  }
+
+  function updateShortcutLabels() {
+    const shortcut = getShortcutLabel();
+    document.querySelectorAll('[data-search-shortcut]').forEach((label) => {
+      label.textContent = shortcut;
+    });
+    document.querySelectorAll('[data-search-shortcut-button]').forEach((button) => {
+      button.setAttribute('aria-label', `Search (${shortcut})`);
+    });
+  }
+
+  updateShortcutLabels();
+
+  function loadScript(src: string) {
+    return new Promise<void>((resolve, reject) => {
+      const existing = document.querySelector(`script[src="${src}"]`);
+      if (existing) {
+        resolve();
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error(`Unable to load ${src}`));
+      document.head.append(script);
+    });
+  }
+
+  function loadStylesheet(href: string) {
+    return new Promise<void>((resolve, reject) => {
+      const existing = document.querySelector(`link[href="${href}"]`);
+      if (existing) {
+        resolve();
+        return;
+      }
+
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.onload = () => resolve();
+      link.onerror = () => reject(new Error(`Unable to load ${href}`));
+      document.head.append(link);
+    });
+  }
+
+  function focusSearchInput() {
+    const input = document.querySelector('#pagefind-container input') as HTMLInputElement | null;
+    input?.focus();
+  }
+
+  async function initPagefind() {
+    if (pagefindReady || pagefindLoading) return;
+    pagefindLoading = true;
+
+    try {
+      await Promise.all([
+        loadStylesheet('/pagefind/pagefind-ui.css'),
+        loadScript('/pagefind/pagefind-ui.js'),
+      ]);
+
+      const PagefindUI = (window as any).PagefindUI;
+      if (!PagefindUI) throw new Error('PagefindUI is unavailable');
+
+      const container = document.querySelector('#pagefind-container');
+      if (!container) return;
+
+      container.innerHTML = '';
+      new PagefindUI({
+        element: '#pagefind-container',
+        resetStyles: false,
+        showImages: false,
+        showSubResults: true,
+      });
+      pagefindReady = true;
+    } catch {
+      const fallback = document.querySelector('[data-search-fallback]');
+      if (fallback) {
+        fallback.textContent = 'Search is available after the production index is generated.';
+      }
+    } finally {
+      pagefindLoading = false;
+      focusSearchInput();
+    }
+  }
 
   function openSearch() {
     modal?.classList.remove('hidden');
-    input?.focus();
+    void initPagefind();
+    setTimeout(focusSearchInput, 0);
   }
   function closeSearch() {
     modal?.classList.add('hidden');

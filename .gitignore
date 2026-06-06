@@ -7,3 +7,6 @@
 # Squad: SubSquad activation file (local to this machine)
 .squad-workstream
 PLAN.md
+node_modules/
+.astro/
+dist/

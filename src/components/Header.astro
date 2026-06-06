@@ -30,10 +30,10 @@ function isActive(href: string): boolean {
     </div>
 
     <div class="nav-actions">
-      <button class="cmd-search" aria-label="Search (Cmd+K)" data-search-trigger>
+      <button class="cmd-search" aria-label="Search (Ctrl+K)" data-search-trigger data-search-shortcut-button>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         Search
-        <kbd>⌘K</kbd>
+        <kbd data-search-shortcut>Ctrl+K</kbd>
       </button>
 
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
