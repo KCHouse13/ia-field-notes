@@ -10,3 +10,4 @@ PLAN.md
 node_modules/
 .astro/
 dist/
+temp/

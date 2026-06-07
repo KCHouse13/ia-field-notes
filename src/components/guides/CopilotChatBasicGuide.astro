@@ -1,0 +1,2245 @@
+---
+// Self-contained interactive guide: "Copilot Chat (Basic)".
+// Ported from a standalone HTML guide into a scoped Astro component so it
+// integrates natively with the site (shared header/footer, theme, fonts, search).
+// - All colliding base classes are namespaced with `cgb-` to avoid global.css bleed.
+// - Main CSS uses Astro scoped styles; dynamically-injected lightbox markup is
+//   styled by a small `is:global` block under `.cgb-root`.
+// - Theme is owned by the site (BaseLayout); the guide ships no theme toggle.
+const IMG = '/images/guides/copilot-chat-basic';
+---
+
+<div class="cgb-root">
+  <!-- ── Guide sub-navigation (sticky under the 56px site header) ── -->
+  <nav class="cgb-subnav" aria-label="Guide sections" data-pagefind-ignore>
+    <div class="cgb-container cgb-subnav-inner">
+      <span class="cgb-subnav-brand"><span class="cgb-subnav-dot" aria-hidden="true">CC</span>Copilot Chat · Basic</span>
+      <ul class="cgb-subnav-links" role="list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#capabilities">Capabilities</a></li>
+        <li><a href="#prompting">Prompting</a></li>
+        <li><a href="#scenarios">Scenarios</a></li>
+        <li><a href="#get-started">Get started</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="cgb-scroll-progress" id="cgb-scroll-progress"></div>
+
+  <!-- ── Hero ── -->
+  <header class="cgb-hero">
+    <div class="cgb-container cgb-hero-content">
+      <p class="cgb-hero-stamp fade-in">Interactive Guide · Microsoft 365</p>
+      <h1 class="fade-in">Copilot Chat<br><span style="font-size:0.55em; display:inline-block; background:var(--accent-subtle); border:1px solid var(--accent); padding:0.1em 0.6em; border-radius:999px; font-style:italic; color:var(--accent); vertical-align:middle; margin-top:-0.15em;">basic</span></h1>
+      <p class="cgb-hero-tagline fade-in" style="font-size:1.4rem; max-width:600px; margin-bottom:1rem;">Overview and Getting Started Guide</p>
+      <p class="cgb-hero-tagline fade-in" style="margin-top:0;">The secure AI workspace included with your Microsoft 365 subscription. No additional license required.</p>
+      <div class="cgb-hero-ctas fade-in">
+        <a href="#overview" class="cgb-btn-primary">Start the Guide →</a>
+        <a href="#capabilities" class="cgb-btn-ghost">See capabilities ↓</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Overview ── -->
+  <section id="overview">
+    <div class="cgb-container">
+      <p class="cgb-section-label fade-in">The Overview</p>
+      <h2 class="cgb-section-title fade-in">Your secure AI workspace</h2>
+      <p class="cgb-section-intro fade-in">
+        Copilot Chat is a secure AI chat experience available at no additional cost for Entra account users with eligible Microsoft 365 subscriptions. It's grounded in web data and protected by Enterprise Data Protection (EDP).
+      </p>
+
+      <div class="callout callout-note fade-in" style="max-width:700px; margin-left:auto; margin-right:auto;">
+        <div class="callout-title"><svg class="cgb-edp-shield" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M12 2.2 4.5 5.1v6.1c0 4.6 3.2 8.9 7.5 10.6 4.3-1.7 7.5-6 7.5-10.6V5.1L12 2.2Z" fill="#107c41"/><path d="m8.6 12.1 2.3 2.3 4.5-4.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Enterprise Data Protection</div>
+        When you see the <strong>green shield icon</strong> in Copilot Chat, it means EDP is applied. Prompts and responses are processed within the Microsoft 365 service boundary, and they are not used to train foundation models, including work content you add or upload.
+      </div>
+
+      <h3 style="font-size:1.2rem; margin:2rem 0 1rem;" class="fade-in">Where to access Copilot Chat</h3>
+      <div class="access-grid fade-in">
+        <a href="https://m365copilot.com" target="_blank" rel="noopener" class="access-item"><span class="access-icon">🌐</span><span>m365copilot.com <span style="color:var(--text-meta);font-size:0.78rem;">(primary web)</span></span><span class="access-action">Open →</span></a>
+        <div class="access-item" onclick="openLightbox('copilot-edge-sidebar.png','Copilot Chat in Microsoft Edge — open the sidebar to access Chat alongside any webpage')"><span class="access-icon">🔲</span><span>Microsoft Edge sidebar</span><span class="access-action">Preview</span></div>
+        <div class="access-item" onclick="openLightbox('copilot-outlook.png','Copilot Chat in Outlook — available in the side pane alongside your email')"><span class="access-icon">📧</span><span>Outlook (left nav / side pane)</span><span class="access-action">Preview</span></div>
+        <div class="access-item" onclick="openLightboxQR()"><span class="access-icon">📱</span><span>Mobile app (iOS &amp; Android)</span><span class="access-action">QR Code</span></div>
+        <div class="access-item" onclick="openLightboxTeams()"><span class="access-icon">💬</span><span>Teams (left nav)</span><span class="access-action">Preview</span></div>
+        <div class="access-item" onclick="openLightbox('copilot-desktop-app.png','M365 Copilot desktop app — look for the Copilot icon in your Windows taskbar','desktop')"><span class="access-icon">💻</span><span>M365 Copilot desktop app</span><span class="access-action">Preview</span></div>
+      </div>
+
+      <div class="guide-hero-image fade-in" onclick="openLightbox('copilot-chat-annotated.png','Copilot Chat interface — click or pinch to zoom into the 14 annotated features')" style="cursor:pointer;" title="Click to enlarge">
+        <img src={`${IMG}/copilot-chat-annotated.png`} alt="Annotated screenshot of the Copilot Chat interface showing 14 numbered features: 1-New chat, 2-Search, 3-Library, 4-Agents, 5-Chat history, 6-Prompt box, 7-File upload, 8-Voice, 9-Prompt starters, 10-Saved prompts, 11-Enterprise protection shield, 12-New chat button, 13-Model selector, 14-App launcher" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Lightbox overlay (shared) ── -->
+  <div class="lightbox-overlay" id="cgb-lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-content" id="cgb-lightbox-content">
+      <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Close">&times;</button>
+      <div id="cgb-lightbox-body"></div>
+      <div class="lightbox-caption" id="cgb-lightbox-caption"></div>
+    </div>
+  </div>
+
+  <!-- ── Capabilities ── -->
+  <section id="capabilities">
+    <div class="cgb-container">
+      <p class="cgb-section-label fade-in">The Capabilities</p>
+      <h2 class="cgb-section-title fade-in">Capabilities at a glance</h2>
+      <p class="cgb-section-intro fade-in">Every feature below is available to you today with your existing Microsoft 365 subscription. Click any card to see an example prompt.</p>
+
+      <!-- Personalization & Customization -->
+      <div class="capability-category">
+        <h3 class="fade-in">Personalization &amp; Customization</h3>
+        <div class="capabilities-grid two-col">
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">⚙️</div>
+              <div class="capability-info"><h4>Custom Instructions</h4><p class="capability-desc">Tell Copilot how you want it to respond — every time, automatically</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <p style="font-size:0.88rem;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75rem;">Custom instructions let you set persistent preferences that apply to every conversation. Think of it as training Copilot on your working style — you set it once, and every response reflects your preferences.</p>
+              <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:0.5rem;"><strong style="color:var(--text-primary);">How to set up:</strong></p>
+              <ol style="font-size:0.85rem;color:var(--text-secondary);line-height:1.7;padding-left:1.25rem;margin-bottom:0.75rem;">
+                <li>Click the <strong>⋯ menu</strong> (top right) → <strong>Settings</strong></li>
+                <li>Go to <strong>Personalization</strong></li>
+                <li>Toggle on <strong>Custom instructions</strong> and click <strong>Edit instructions</strong></li>
+                <li>Type your preferences or click the suggested chips to add common ones</li>
+                <li>Click <strong>Save instructions</strong></li>
+              </ol>
+              <img src={`${IMG}/copilot-custom-instructions.png`} alt="Custom Instructions settings showing personalization options and instruction editor" style="border-radius:8px;border:1px solid var(--border);margin-top:0.5rem;" class="cgb-zoomable" title="Click to enlarge" onclick="openLightbox('copilot-custom-instructions.png','Custom instructions — set persistent preferences under Settings → Personalization that apply to every conversation')" />
+              <div class="callout callout-tip" style="margin-top:1rem;">
+                <div class="callout-title">💡 Tip</div>Be specific about your role and preferences. Instead of "be helpful," try: <em>"I'm a CPG sales rep. Keep responses concise and action-oriented. Focus on retail buyer conversations and category management."</em>
+              </div>
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">🧠</div>
+              <div class="capability-info"><h4>Saved Memories</h4><p class="capability-desc">Copilot remembers details you share to personalize future responses</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <p style="font-size:0.88rem;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75rem;">Memories let Copilot learn context about you over time — your accounts, your role, your goals — so it can give more relevant answers without you repeating yourself every conversation.</p>
+              <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:0.5rem;"><strong style="color:var(--text-primary);">How to add a memory:</strong></p>
+              <ol style="font-size:0.85rem;color:var(--text-secondary);line-height:1.7;padding-left:1.25rem;margin-bottom:0.5rem;">
+                <li>In any chat, tell Copilot: <em>"Add the following to memory: [your context]"</em></li>
+                <li>Copilot will confirm with a <strong>"Memory updated"</strong> indicator</li>
+                <li>Future conversations will automatically use this context</li>
+              </ol>
+              <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:0.75rem;"><strong style="color:var(--text-primary);">How to manage memories:</strong> Go to <strong>⋯ menu → Settings → Personalization → Manage saved memories</strong> to review, edit, or delete what Copilot remembers.</p>
+              <img src={`${IMG}/copilot-memories.png`} alt="Saved memories showing how to add context and manage memories in settings" style="border-radius:8px;border:1px solid var(--border);margin-top:0.5rem;" class="cgb-zoomable" title="Click to enlarge" onclick="openLightbox('copilot-memories.png','Saved memories — add context in chat and manage what Copilot remembers under Settings → Personalization')" />
+              <div class="callout callout-tip" style="margin-top:1rem;">
+                <div class="callout-title">💡 Tip</div>Great things to save as memories: your key accounts, your role and team, the products you sell, your preferred communication style, and recurring meeting cadences. The more Copilot knows about your work, the less prompting you need.
+              </div>
+            </div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Core Chat -->
+      <div class="capability-category">
+        <h3 class="fade-in">Core Chat</h3>
+        <div class="capabilities-grid">
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">💬</div>
+              <div class="capability-info"><h4>Web-grounded Q&amp;A</h4><p class="capability-desc">Ask questions answered from internet data in real time</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">What are the top 3 consumer trends driving growth in the snack food category for 2026?<span class="copy-hint">Click to copy</span></div></div>
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">🔄</div>
+              <div class="capability-info"><h4>Multi-turn Conversations</h4><p class="capability-desc">Refine and build on answers across follow-up messages</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">Now compare those trends to what private label brands are doing differently in the same category<span class="copy-hint">Click to copy</span></div></div>
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">🧠</div>
+              <div class="capability-info"><h4>Model Selection</h4><p class="capability-desc">Choose between Auto, Quick Response, or Think Deeper modes</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">Think deeper: What are the second-order effects of GLP-1 weight loss medications on snacking occasions and CPG portfolio strategy?<span class="copy-hint">Click to copy</span></div></div>
+              <div class="capability-images">
+                <div class="cap-img-item" onclick="openLightbox('model-selector-1.png','Model selector — Auto, Quick Response, Think Deeper, plus Claude Opus and GPT model families')">
+                  <img src={`${IMG}/model-selector-1.png`} alt="Model selector dropdown showing Auto, Quick Response, Think Deeper, Opus, and GPT options" loading="lazy" />
+                  <div class="cap-img-label">Model selector</div>
+                </div>
+              </div>
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">📝</div>
+              <div class="capability-info"><h4>Summarize Content</h4><p class="capability-desc">Paste any text and get a structured summary instantly</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">Summarize the following trade publication article in 3 bullet points with implications for our retail strategy: [paste text]<span class="copy-hint">Click to copy</span></div></div>
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">✏️</div>
+              <div class="capability-info"><h4>Rewrite &amp; Improve</h4><p class="capability-desc">Polish your writing for clarity, tone, and impact</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">Rewrite this buyer presentation talking point to be more concise and data-driven: [paste text]<span class="copy-hint">Click to copy</span></div></div>
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">🌐</div>
+              <div class="capability-info"><h4>Translate</h4><p class="capability-desc">Translate content between languages</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">Translate this product packaging copy into Spanish for our Hispanic market expansion, keeping a friendly and appetizing tone<span class="copy-hint">Click to copy</span></div></div>
+            </div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Files & Content -->
+      <div class="capability-category">
+        <h3 class="fade-in">Files &amp; Content</h3>
+        <div class="capabilities-grid">
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">📎</div>
+              <div class="capability-info"><h4>Upload Files</h4><p class="capability-desc">Upload documents, images, or data files via the '+' button for analysis</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">Summarize the key findings and action items from this quarterly business review deck<span class="copy-hint">Click to copy</span></div></div>
+              <div class="capability-images">
+                <div class="cap-img-item" onclick="openLightbox('file-upload-plus.png','The + button menu — Add work content, upload images and files, attach cloud files, Designer, Compose (Word/Excel/PowerPoint), All agents')">
+                  <img src={`${IMG}/file-upload-plus.png`} alt="File upload menu showing Add work content, Upload images and files, Attach cloud files, Designer, Compose with Word/Excel/PowerPoint submenu, All agents" loading="lazy" />
+                  <div class="cap-img-label">'+' button menu</div>
+                </div>
+              </div>
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">📂</div>
+              <div class="capability-info"><h4>Reference Files (ContextIQ)</h4><p class="capability-desc">Type '/' to select files from your Microsoft 365 content</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">/Q2-Kroger-Scorecard.xlsx — Which SKUs are underperforming versus plan and what's driving the gap?<span class="copy-hint">Click to copy</span></div></div>
+              <div class="capability-images">
+                <div class="cap-img-item" onclick="openLightbox('file-contextiq-slash.png','Type / in the prompt box to search and reference your recently opened files directly in the conversation')">
+                  <img src={`${IMG}/file-contextiq-slash.png`} alt="ContextIQ file picker showing recent documents like Word files and PowerPoint presentations with a search bar" loading="lazy" />
+                  <div class="cap-img-label">'/' file reference</div>
+                </div>
+              </div>
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">🎨</div>
+              <div class="capability-info"><h4>Image Generation</h4><p class="capability-desc">Create images from text descriptions</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">Create a professional banner image for our annual sales kickoff meeting with the theme 'Fueling Growth Together'<span class="copy-hint">Click to copy</span></div></div>
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">🔍</div>
+              <div class="capability-info"><h4>Image Analysis</h4><p class="capability-desc">Upload images and ask questions about them</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">What does this planogram photo show? Identify any compliance issues with our brand's shelf placement<span class="copy-hint">Click to copy</span></div></div>
+            </div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Copilot Pages -->
+      <div class="capability-category">
+        <h3 class="fade-in">Copilot Pages</h3>
+        <div class="capabilities-grid two-col">
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">📄</div>
+              <div class="capability-info"><h4>Create Pages</h4><p class="capability-desc">Convert any Copilot response into an editable, shareable document</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">Draft a project status update for my team<span class="copy-hint">Click to copy</span></div></div>
+              <p style="font-size:0.85rem;color:var(--text-meta);margin-top:0.5rem;">Then click "Edit in Pages" on the response</p>
+              <img src={`${IMG}/copilot-pages-edit.png`} alt="Copilot response showing the Edit in Pages button" style="margin-top:0.75rem;border-radius:8px;border:1px solid var(--border);" class="cgb-zoomable" title="Click to enlarge" onclick="openLightbox('copilot-pages-edit.png','Create Pages — turn any Copilot response into an editable document with the Edit in Pages button')" />
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">👥</div>
+              <div class="capability-info"><h4>Collaborate on Pages</h4><p class="capability-desc">Share Pages with colleagues for real-time co-editing</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <p style="font-size:0.88rem;color:var(--text-secondary);margin-top:0.75rem;">Share any Copilot Page with your team for real-time collaborative editing — just like a shared document.</p>
+              <img src={`${IMG}/copilot-pages-view.png`} alt="Copilot Page in editing view with sharing and collaboration" style="margin-top:0.75rem;border-radius:8px;border:1px solid var(--border);" class="cgb-zoomable" title="Click to enlarge" onclick="openLightbox('copilot-pages-view.png','Collaborate on Pages — share a Copilot Page for real-time co-editing, just like a shared document')" />
+            </div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Copilot in Apps -->
+      <div class="capability-category">
+        <h3 class="fade-in">Copilot in your everyday apps</h3>
+        <div class="capabilities-grid two-col">
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">💬</div>
+              <div class="capability-info"><h4>Chat in Teams</h4><p class="capability-desc">Copilot Chat opens in the Teams left nav, aware of your open chat or channel</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">Summarize the key decisions from today's channel planning thread and list any action items assigned to me<span class="copy-hint">Click to copy</span></div></div>
+              <div class="capability-images">
+                <div class="cap-img-item" onclick="openLightbox('copilot-teams-closed.png','Copilot Chat in Teams — sidebar closed, click the Copilot icon in the left nav to open')">
+                  <img src={`${IMG}/copilot-teams-closed.png`} alt="Teams with Copilot Chat sidebar closed" loading="lazy" />
+                  <div class="cap-img-label">Sidebar closed</div>
+                </div>
+                <div class="cap-img-item" onclick="openLightbox('copilot-teams-open.png','Copilot Chat in Teams — sidebar open showing agents, chats, and prompt area')">
+                  <img src={`${IMG}/copilot-teams-open.png`} alt="Teams with Copilot Chat sidebar open" loading="lazy" />
+                  <div class="cap-img-label">Sidebar open</div>
+                </div>
+              </div>
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">📧</div>
+              <div class="capability-info"><h4>Chat in Outlook</h4><p class="capability-desc">Copilot Chat opens alongside your email — summarize threads, get insights, and draft replies</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+
+              <p style="font-size:0.88rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1.25rem;">Copilot in Outlook reads your full email thread for context, so you can work faster with short, natural prompts. Here's the workflow from inbox to reply:</p>
+
+              <div style="margin-bottom:1.5rem;">
+                <h4 style="font-family:var(--font-body);font-size:0.95rem;font-weight:600;margin-bottom:0.5rem;">1. Summarize an email thread</h4>
+                <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.55;margin-bottom:0.75rem;">Long email threads pile up fast. Click <strong>"Summarize this email"</strong> at the top of any conversation to get a structured overview in seconds — no prompt required.</p>
+                <div class="cap-img-item" onclick="openLightbox('copilot-outlook-inbox.png','Outlook inbox showing the Summarize this email button at the top of a thread')" style="cursor:pointer;">
+                  <img src={`${IMG}/copilot-outlook-inbox.png`} alt="Outlook inbox with Summarize this email button highlighted" loading="lazy" style="border-radius:8px;border:1px solid var(--border);" />
+                  <div class="cap-img-label">Click "Summarize this email" to instantly catch up on any thread</div>
+                </div>
+              </div>
+
+              <div style="margin-bottom:1.5rem;">
+                <h4 style="font-family:var(--font-body);font-size:0.95rem;font-weight:600;margin-bottom:0.5rem;">2. Get thread insights &amp; coaching</h4>
+                <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.55;margin-bottom:0.5rem;">Copilot doesn't just summarize — it organizes the thread into structured categories with source citations linking back to the original emails. Look for the <strong>"Thinking partner note"</strong> at the bottom where Copilot proactively surfaces opportunities you might have missed.</p>
+                <div class="cap-img-item" onclick="openLightbox('copilot-outlook-summary.png','Copilot pane showing structured thread summary with source citations and a Thinking Partner note')" style="cursor:pointer;">
+                  <img src={`${IMG}/copilot-outlook-summary.png`} alt="Copilot side pane with structured summary, source citations, and Thinking Partner coaching note" loading="lazy" style="border-radius:8px;border:1px solid var(--border);" />
+                  <div class="cap-img-label">Structured summary with source citations + proactive "Thinking partner" coaching</div>
+                </div>
+              </div>
+
+              <div style="margin-bottom:1rem;">
+                <h4 style="font-family:var(--font-body);font-size:0.95rem;font-weight:600;margin-bottom:0.5rem;">3. Draft a reply with Copilot</h4>
+                <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.55;margin-bottom:0.5rem;">Tell Copilot what you want to say and it drafts the full reply in context. Review the response, click <strong>"Edit and Send"</strong> to finalize, and you're done. Copilot even adds a thinking partner tip to strengthen your message.</p>
+                <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">Draft a reply about how we could layer in the different commercial levers<span class="copy-hint">Click to copy</span></div></div>
+                <div class="cap-img-item" onclick="openLightbox('copilot-outlook-draft.png','Copilot drafting a reply email with Edit and Send button and Thinking Partner tip')" style="cursor:pointer;margin-top:0.75rem;">
+                  <img src={`${IMG}/copilot-outlook-draft.png`} alt="Copilot drafting a reply in Outlook with Edit and Send button and Thinking Partner coaching tip" loading="lazy" style="border-radius:8px;border:1px solid var(--border);" />
+                  <div class="cap-img-label">Copilot drafts the reply — click "Edit and Send" to review and finalize</div>
+                </div>
+              </div>
+
+              <div class="callout callout-tip" style="margin-top:1rem;">
+                <div class="callout-title">💡 Tip</div>Copilot in Outlook reads the full email thread for context — so your prompts can be short. Just say <em>"draft a reply suggesting we increase the promotional window"</em> and it knows who you're replying to and what was discussed.
+              </div>
+
+            </div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Agents -->
+      <div class="capability-category">
+        <h3 class="fade-in">Agents</h3>
+        <div class="capabilities-grid two-col">
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">🤖</div>
+              <div class="capability-info"><h4>Browse Agents</h4><p class="capability-desc">Access a catalog of prebuilt agents from the sidebar</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <p style="font-size:0.88rem;color:var(--text-secondary);margin-top:0.75rem;">Open the sidebar in Copilot Chat to explore the agent catalog — prebuilt agents for specialized tasks like research, writing, and data analysis.</p>
+              <div class="screenshot-placeholder"><span class="ss-icon">📸</span>Agent catalog in sidebar</div>
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">📊</div>
+              <div class="capability-info"><h4>App Agents</h4><p class="capability-desc">Word, Excel, and PowerPoint agents available in the M365 Copilot app</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <p style="font-size:0.88rem;color:var(--text-secondary);margin-top:0.75rem;">Access specialized agents for Word, Excel, and PowerPoint directly from the Microsoft 365 Copilot app to assist with document creation, data analysis, and presentations.</p>
+            </div></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Copilot Search -->
+      <div class="capability-category">
+        <h3 class="fade-in">Copilot Search</h3>
+        <div class="capabilities-grid two-col">
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">🔎</div>
+              <div class="capability-info"><h4>Universal Search</h4><p class="capability-desc">AI-powered search across all your Microsoft 365 data and connected sources</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">Find the latest presentation about our Q3 trade promotion strategy for the club channel<span class="copy-hint">Click to copy</span></div></div>
+              <div class="capability-images">
+                <div class="cap-img-item" onclick="openLightbox('copilot-search.png','Copilot Search — search across Outlook, OneDrive, Word, Excel, PowerPoint with AI-powered results and suggested actions')">
+                  <img src={`${IMG}/copilot-search.png`} alt="Copilot Search showing search results across M365 apps with document previews and suggested actions" loading="lazy" />
+                  <div class="cap-img-label">Search experience</div>
+                </div>
+              </div>
+            </div></div>
+          </div>
+
+          <div class="capability-card fade-in">
+            <div class="capability-header" onclick="toggleCapability(this)">
+              <div class="capability-icon">🔗</div>
+              <div class="capability-info"><h4>Search → Chat</h4><p class="capability-desc">Start with a search query, then continue into a deeper chat exploration</p></div>
+              <div class="expand-icon">+</div>
+            </div>
+            <div class="capability-detail"><div class="capability-detail-inner">
+              <p style="font-size:0.88rem;color:var(--text-secondary);margin-top:0.75rem;">Begin with a search to find what you need, then continue the conversation in chat to analyze, summarize, or build on the results.</p>
+              <div class="capability-images">
+                <div class="cap-img-item" onclick="openLightbox('copilot-chat-search.png','Chat Search — search your conversation history, filter by date, and revisit previous Copilot interactions')">
+                  <img src={`${IMG}/copilot-chat-search.png`} alt="Chat search showing conversation history organized by Today and Previous 30 Days with search and filter options" loading="lazy" />
+                  <div class="cap-img-label">Chat history search</div>
+                </div>
+              </div>
+            </div></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Prompting ── -->
+  <section id="prompting">
+    <div class="cgb-container">
+      <p class="cgb-section-label fade-in">The Framework</p>
+      <h2 class="cgb-section-title fade-in">The prompting framework</h2>
+      <p class="cgb-section-intro fade-in">The quality of Copilot's output depends on how you ask. Use the <strong>GCSE framework</strong> — four ingredients that turn a vague request into a powerful prompt.</p>
+
+      <!-- Part 1: GCSE Framework Card -->
+      <div class="gcse-grid fade-in">
+        <div class="gcse-item" title="Example: 'Create 5 talking points for my buyer meeting'">
+          <div class="gcse-letter">G</div>
+          <div class="gcse-word">Goal</div>
+          <div class="gcse-desc">What you want Copilot to do</div>
+        </div>
+        <div class="gcse-item" title="Example: 'I'm a CPG sales rep meeting with a grocery buyer about expanding shelf space'">
+          <div class="gcse-letter">C</div>
+          <div class="gcse-word">Context</div>
+          <div class="gcse-desc">Background, audience, or situation</div>
+        </div>
+        <div class="gcse-item" title="Example: 'Review /Q2-Scorecard.xlsx for sales data'">
+          <div class="gcse-letter">S</div>
+          <div class="gcse-word">Source</div>
+          <div class="gcse-desc">Files, data, or references to use</div>
+        </div>
+        <div class="gcse-item" title="Example: 'Format as a numbered list, keep a professional tone, under 200 words'">
+          <div class="gcse-letter">E</div>
+          <div class="gcse-word">Expectations</div>
+          <div class="gcse-desc">Format, tone, length, and structure</div>
+        </div>
+      </div>
+
+      <div class="callout callout-tip fade-in">
+        <div class="callout-title">💡 Tip</div>
+        You don't need all four elements in every prompt — but the more you include, the better your results will be. Start with Goal, then add Context and Expectations as needed.
+      </div>
+
+      <!-- Part 2: Watch a Prompt Evolve -->
+      <h3 class="fade-in" style="font-family:var(--font-heading);font-size:1.5rem;font-weight:700;margin:2.5rem 0 0.5rem;">Watch a prompt evolve</h3>
+      <p class="fade-in" style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:1.25rem;">The same task — three levels of detail. Notice how each version layers in more GCSE elements.</p>
+
+      <div class="evolve-stepper fade-in">
+        <div class="evolve-tabs">
+          <button class="evolve-tab active" data-level="good" onclick="switchEvolve('good')"><span class="evolve-dot"></span>Good</button>
+          <button class="evolve-tab" data-level="better" onclick="switchEvolve('better')"><span class="evolve-dot"></span>Better</button>
+          <button class="evolve-tab" data-level="best" onclick="switchEvolve('best')"><span class="evolve-dot"></span>Best</button>
+        </div>
+        <div class="evolve-panel-wrap">
+          <div class="evolve-panel active" id="evolve-good">
+            <div class="evolve-meta">
+              <span class="evolve-badge good">GOOD</span>
+              <div class="gcse-pills">
+                <span class="gcse-pill goal">Goal</span>
+              </div>
+            </div>
+            <div class="evolve-prompt" onclick="copyPrompt(this)"><span class="highlight-goal">Help me prepare talking points for a meeting with a grocery buyer.</span><span class="copy-hint">Click to copy</span></div>
+            <div class="evolve-whats-new">This prompt has a clear <strong>Goal</strong>, but Copilot doesn't know who you are, what you're selling, or how to format the response — so results will be generic.</div>
+          </div>
+          <div class="evolve-panel" id="evolve-better">
+            <div class="evolve-meta">
+              <span class="evolve-badge better">BETTER</span>
+              <div class="gcse-pills">
+                <span class="gcse-pill goal">Goal</span>
+                <span class="gcse-pill context">Context</span>
+                <span class="gcse-pill expectations">Expectations</span>
+              </div>
+            </div>
+            <div class="evolve-prompt" onclick="copyPrompt(this)"><span class="highlight-context">I'm a CPG sales rep meeting with the snack category buyer at a regional grocery chain to discuss expanding our brand's shelf presence for Q3.</span> <span class="highlight-goal">Create 5 talking points covering category growth data, our brand's performance metrics, new product introductions, and promotional support we can offer.</span> <span class="highlight-expectations">Use a consultative, partnership-focused tone that positions us as a category growth partner.</span><span class="copy-hint">Click to copy</span></div>
+            <div class="evolve-whats-new"><strong>+Context</strong> tells Copilot your role and situation. <strong>+Expectations</strong> sets the tone. Results will be more relevant and tailored to your meeting.</div>
+          </div>
+          <div class="evolve-panel" id="evolve-best">
+            <div class="evolve-meta">
+              <span class="evolve-badge best">BEST</span>
+              <div class="gcse-pills">
+                <span class="gcse-pill goal">Goal</span>
+                <span class="gcse-pill context">Context</span>
+                <span class="gcse-pill source">Source</span>
+                <span class="gcse-pill expectations">Expectations</span>
+              </div>
+            </div>
+            <div class="evolve-prompt" onclick="copyPrompt(this)"><span class="highlight-context">I'm a CPG territory sales rep preparing for a quarterly category review with the snack buyer at FreshMart Grocery. Our brand holds the #2 share position in salty snacks at their stores, and we've been growing distribution across their 200-location network.</span> <span class="highlight-source">Review /FreshMart-Q2-Scorecard.xlsx for the latest sales and distribution data</span> <span class="highlight-goal">and create 5 talking points covering: category growth we've driven this quarter, our top-performing SKUs vs. plan, 2 new product launches for Q3 with projected incrementality, and one competitive gap we can help them address.</span> <span class="highlight-expectations">Format as a numbered list with a one-sentence executive summary at the top. Keep the tone confident but collaborative — this buyer values data and brevity.</span><span class="copy-hint">Click to copy</span></div>
+            <div class="evolve-whats-new"><strong>+Source</strong> points Copilot at real data via the '/' file reference. All four GCSE elements combine for a response that's specific, data-driven, and ready to present.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gcse-legend fade-in" style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.5rem;font-size:0.78rem;">
+        <span><span class="highlight-goal">&nbsp;Goal&nbsp;</span></span>
+        <span><span class="highlight-context">&nbsp;Context&nbsp;</span></span>
+        <span><span class="highlight-source">&nbsp;Source&nbsp;</span></span>
+        <span><span class="highlight-expectations">&nbsp;Expectations&nbsp;</span></span>
+      </div>
+
+      <div class="callout callout-tip fade-in">
+        <div class="callout-title">💡 Tip</div>You can type '/' in the prompt box to pull in any document from your Microsoft 365 files as context.
+      </div>
+
+      <!-- Part 3: Power Techniques -->
+      <h3 class="fade-in" style="font-family:var(--font-heading);font-size:1.5rem;font-weight:700;margin:2.5rem 0 0.5rem;">Power techniques</h3>
+      <p class="fade-in" style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:1.25rem;">Six strategies that turn good prompts into great ones. Click any card to expand.</p>
+
+      <div class="capabilities-grid prompting-techniques fade-in">
+        <div class="capability-card fade-in">
+          <div class="capability-header" onclick="toggleCapability(this)">
+            <div class="capability-icon">🔄</div>
+            <div class="capability-info"><h4>Keep the Conversation Going</h4><p class="capability-desc">Don't start over — build on what Copilot gave you with follow-up prompts.</p></div>
+            <div class="expand-icon">+</div>
+          </div>
+          <div class="capability-detail"><div class="capability-detail-inner">
+            <div class="prompt-example"><span class="prompt-label">First prompt:</span>
+              <div class="prompt-text" onclick="copyPrompt(this)">Summarize the key consumer trends driving growth in the better-for-you snack segment for 2026.<span class="copy-hint">Click to copy</span></div>
+            </div>
+            <div class="prompt-example" style="margin-top:0.75rem;"><span class="prompt-label">Follow-up:</span>
+              <div class="prompt-text" onclick="copyPrompt(this)">Now frame those trends as talking points I can use in a category review meeting with a grocery buyer who's considering expanding our shelf space.<span class="copy-hint">Click to copy</span></div>
+            </div>
+            <div class="callout callout-tip" style="margin-top:1rem;">
+              <div class="callout-title">💡 Tip</div>
+              Copilot remembers your full conversation. Each follow-up refines the output — think of it as collaborating with a colleague.
+            </div>
+          </div></div>
+        </div>
+
+        <div class="capability-card fade-in">
+          <div class="capability-header" onclick="toggleCapability(this)">
+            <div class="capability-icon">📝</div>
+            <div class="capability-info"><h4>Give Specific Instructions</h4><p class="capability-desc">Tell Copilot what to include AND what to leave out.</p></div>
+            <div class="expand-icon">+</div>
+          </div>
+          <div class="capability-detail"><div class="capability-detail-inner">
+            <div class="prompt-example"><span class="prompt-label">Try this prompt:</span>
+              <div class="prompt-text" onclick="copyPrompt(this)">Write an executive summary of our brand's Q2 performance at Kroger. Focus on measurable outcomes like dollar sales growth, distribution gains, and promotional lift. Do NOT include internal margin data or broker commission details. Keep it under 200 words and suitable for sharing directly with the buyer.<span class="copy-hint">Click to copy</span></div>
+            </div>
+            <div class="callout callout-tip" style="margin-top:1rem;">
+              <div class="callout-title">💡 Tip</div>
+              Negative instructions ('do not include...') are surprisingly powerful — they prevent Copilot from going off-track.
+            </div>
+          </div></div>
+        </div>
+
+        <div class="capability-card fade-in">
+          <div class="capability-header" onclick="toggleCapability(this)">
+            <div class="capability-icon">📊</div>
+            <div class="capability-info"><h4>Break It Into Steps</h4><p class="capability-desc">Don't cram everything into one prompt — break complex tasks into stages.</p></div>
+            <div class="expand-icon">+</div>
+          </div>
+          <div class="capability-detail"><div class="capability-detail-inner">
+            <div class="prompt-example"><span class="prompt-label">Step 1:</span>
+              <div class="prompt-text" onclick="copyPrompt(this)">Create an outline for a quarterly business review presentation for our top retail account covering category performance, brand contribution, and growth recommendations.<span class="copy-hint">Click to copy</span></div>
+            </div>
+            <div class="prompt-example" style="margin-top:0.75rem;"><span class="prompt-label">Step 2:</span>
+              <div class="prompt-text" onclick="copyPrompt(this)">Expand the 'brand contribution' section with 3 specific examples of how our promotional programs drove incremental category sales.<span class="copy-hint">Click to copy</span></div>
+            </div>
+            <div class="prompt-example" style="margin-top:0.75rem;"><span class="prompt-label">Step 3:</span>
+              <div class="prompt-text" onclick="copyPrompt(this)">Now write speaker notes for each section in a conversational tone I can use while presenting to the buyer.<span class="copy-hint">Click to copy</span></div>
+            </div>
+            <div class="callout callout-tip" style="margin-top:1rem;">
+              <div class="callout-title">💡 Tip</div>
+              Multi-step prompting gives you a chance to review and course-correct at each stage — just like reviewing drafts with a teammate.
+            </div>
+          </div></div>
+        </div>
+
+        <div class="capability-card fade-in">
+          <div class="capability-header" onclick="toggleCapability(this)">
+            <div class="capability-icon">🎭</div>
+            <div class="capability-info"><h4>Assign a Persona</h4><p class="capability-desc">Tell Copilot who to 'be' for more specialized, targeted answers.</p></div>
+            <div class="expand-icon">+</div>
+          </div>
+          <div class="capability-detail"><div class="capability-detail-inner">
+            <div class="prompt-example"><span class="prompt-label">Try this prompt:</span>
+              <div class="prompt-text" onclick="copyPrompt(this)">Act as a category management consultant advising a grocery chain's VP of Merchandising. Explain in business terms why allocating more shelf space to better-for-you snack brands will drive category growth and higher basket size over the next 12 months. Keep the language retail-friendly — use terms like incrementality, penny profit, and turns.<span class="copy-hint">Click to copy</span></div>
+            </div>
+            <div class="callout callout-tip" style="margin-top:1rem;">
+              <div class="callout-title">💡 Tip</div>
+              Personas help set the expertise level and tone. Try 'Act as a financial analyst,' 'Act as a communications specialist,' or 'Act as an onboarding manager.'
+            </div>
+          </div></div>
+        </div>
+
+        <div class="capability-card fade-in">
+          <div class="capability-header" onclick="toggleCapability(this)">
+            <div class="capability-icon">📄</div>
+            <div class="capability-info"><h4>Use Templates of Good</h4><p class="capability-desc">Give Copilot an example document to follow for structure and tone.</p></div>
+            <div class="expand-icon">+</div>
+          </div>
+          <div class="capability-detail"><div class="capability-detail-inner">
+            <div class="prompt-example"><span class="prompt-label">Try this prompt:</span>
+              <div class="prompt-text" onclick="copyPrompt(this)">Create a quarterly business review presentation for FreshMart Grocery's snack category buyer. Use /Kroger-QBR-Q1.pptx as a template for structure, formatting, and data visualization style. Replace all Kroger references with FreshMart details and update with Q2 data points.<span class="copy-hint">Click to copy</span></div>
+            </div>
+            <div class="callout callout-tip" style="margin-top:1rem;">
+              <div class="callout-title">💡 Tip</div>
+              Uploading or referencing an existing document as a 'template of good' dramatically improves consistency — especially for proposals, reports, and customer communications.
+            </div>
+          </div></div>
+        </div>
+
+        <div class="capability-card fade-in">
+          <div class="capability-header" onclick="toggleCapability(this)">
+            <div class="capability-icon">❓</div>
+            <div class="capability-info"><h4>Ask Copilot What It Needs</h4><p class="capability-desc">When you're stuck, let Copilot help you write the prompt.</p></div>
+            <div class="expand-icon">+</div>
+          </div>
+          <div class="capability-detail"><div class="capability-detail-inner">
+            <div class="prompt-example"><span class="prompt-label">Try this prompt:</span>
+              <div class="prompt-text" onclick="copyPrompt(this)">I need to build a new distribution pitch for a 50-store regional grocery chain that doesn't currently carry our snack brand. What specific details, data points, or context do you need from me to create the most compelling pitch?<span class="copy-hint">Click to copy</span></div>
+            </div>
+            <div class="callout callout-tip" style="margin-top:1rem;">
+              <div class="callout-title">💡 Tip</div>
+              This is a power move — Copilot will ask clarifying questions that help you think through what you actually need. Great when starting from a blank page.
+            </div>
+          </div></div>
+        </div>
+
+      </div>
+
+      <!-- Part 4: Try It Yourself -->
+      <h3 class="fade-in" style="font-family:var(--font-heading);font-size:1.5rem;font-weight:700;margin:2.5rem 0 0.5rem;">Try it yourself</h3>
+      <p class="fade-in" style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:1.25rem;">Read each scenario, write your own prompt, then click to see our suggestion.</p>
+
+      <div class="practice-grid fade-in">
+
+        <div class="practice-card fade-in">
+          <div class="practice-body">
+            <div class="practice-icon">✉️</div>
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.25rem;">Scenario 1</div>
+            <h4>Buyer Meeting Follow-Up</h4>
+            <div class="practice-challenge">Challenge: Write a prompt that gets Copilot to draft a professional follow-up email to the buyer.</div>
+            <p>You're a CPG sales representative who just finished a 45-minute meeting with a grocery chain's category buyer about expanding shelf placement for your snack brand. You discussed promotional pricing, new SKU introductions, and planogram updates for Q3.</p>
+            <textarea class="practice-textarea" placeholder="Write your prompt here..."></textarea>
+            <div class="practice-actions">
+              <button onclick="toggleReveal(this)" style="background:none;border:1px solid var(--border);border-radius:8px;padding:0.5rem 1rem;cursor:pointer;color:var(--accent);font-size:0.85rem;font-weight:600;font-family:var(--font-body);width:100%;transition:border-color 0.2s;">See our suggestion ▼</button>
+              <div class="practice-reveal" style="display:none;margin-top:0.75rem;">
+                <div class="prompt-text" onclick="copyPrompt(this)">I'm a CPG sales rep and just finished a meeting with the category buyer at FreshMart Grocery about expanding shelf placement for our snack portfolio. We discussed: Q3 promotional pricing for our top 5 SKUs, introducing 2 new flavor variants, and updating the planogram in 200 stores. Draft a professional follow-up email that includes: a thank you for their time, a summary of the 3 key decisions we aligned on, a table of next steps with owners and target dates, and a closing paragraph confirming our next review meeting. Keep the tone collaborative and partnership-focused.<span class="copy-hint">Click to copy</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="practice-card fade-in">
+          <div class="practice-body">
+            <div class="practice-icon">🔬</div>
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.25rem;">Scenario 2</div>
+            <h4>Competitive Shelf Analysis</h4>
+            <div class="practice-challenge">Challenge: Write a prompt that helps you quickly build a competitive brief for your team.</div>
+            <p>Your regional sales director asked you to brief the team on how three competitor brands are positioning their new product lines in the natural/organic snack category. You have 30 minutes before the sales huddle and no existing research.</p>
+            <textarea class="practice-textarea" placeholder="Write your prompt here..."></textarea>
+            <div class="practice-actions">
+              <button onclick="toggleReveal(this)" style="background:none;border:1px solid var(--border);border-radius:8px;padding:0.5rem 1rem;cursor:pointer;color:var(--accent);font-size:0.85rem;font-weight:600;font-family:var(--font-body);width:100%;transition:border-color 0.2s;">See our suggestion ▼</button>
+              <div class="practice-reveal" style="display:none;margin-top:0.75rem;">
+                <div class="prompt-text" onclick="copyPrompt(this)">I'm a CPG sales representative preparing for a team huddle in 30 minutes. I need a competitive analysis of how three competitor brands — Kind Snacks, RXBAR, and Nature Valley — are positioning their new product lines in the natural/organic snack category. Create a comparison table with columns for Brand, New Products (2026), Price Point, Key Claims/Positioning, Target Consumer, and Potential Weakness. End with 3 talking points on how our brand portfolio is differentiated and where we have whitespace opportunities.<span class="copy-hint">Click to copy</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="practice-card fade-in">
+          <div class="practice-body">
+            <div class="practice-icon">📊</div>
+            <div style="font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.25rem;">Scenario 3</div>
+            <h4>Quarterly Business Review Deck</h4>
+            <div class="practice-challenge">Challenge: Write a prompt that produces a polished executive summary for your retail partner.</div>
+            <p>You need to create a one-page executive summary for a retail partner showing the value your brand delivered to their category this quarter — including sales lift from promotions, new distribution gains, and consumer insights. It needs to be polished enough to share with their VP of Merchandising.</p>
+            <textarea class="practice-textarea" placeholder="Write your prompt here..."></textarea>
+            <div class="practice-actions">
+              <button onclick="toggleReveal(this)" style="background:none;border:1px solid var(--border);border-radius:8px;padding:0.5rem 1rem;cursor:pointer;color:var(--accent);font-size:0.85rem;font-weight:600;font-family:var(--font-body);width:100%;transition:border-color 0.2s;">See our suggestion ▼</button>
+              <div class="practice-reveal" style="display:none;margin-top:0.75rem;">
+                <div class="prompt-text" onclick="copyPrompt(this)">Create a one-page executive summary for FreshMart Grocery's VP of Merchandising showcasing the value our snack brand partnership delivered in Q2 2026. Include these sections: Partnership Overview (2 sentences about our relationship and category role), Key Achievements (4 bullet points covering: promotional sales lift percentage, new SKU velocity data, distribution expansion across their store network, and shopper conversion metrics), Challenges Addressed (2 bullets about out-of-stock reduction and planogram optimization), and Recommended Next Steps (3 bullets for Q3 initiatives). Use a professional, data-driven tone. Format with clear section headers and keep the total length under 400 words.<span class="copy-hint">Click to copy</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Part 5: Quick Reference Cheat Sheet -->
+      <div class="cheat-sheet fade-in">
+        <h3>Quick-reference cheat sheet</h3>
+        <ol>
+          <li>📏 <strong>Length matters</strong> — 25-30 words is the sweet spot. Too short = generic results. Too long = Copilot may miss instructions.</li>
+          <li>🧩 <strong>Break it down</strong> — Multi-step prompts beat single complex ones. Review and refine between steps.</li>
+          <li>🎭 <strong>Assign a persona</strong> — "Act as a..." instantly sets expertise level and tone.</li>
+          <li>❓ <strong>Ask what it needs</strong> — When stuck, ask Copilot what context would help most.</li>
+          <li>🔗 <strong>Think end-to-end</strong> — Don't just create a table of action items; write the whole follow-up email that includes the table.</li>
+          <li>🧪 <strong>Experiment</strong> — Try different structures, tones, and follow-ups. Curiosity reveals new capability.</li>
+          <li>🔄 <strong>Iterate always</strong> — Your first result is a draft, not a final answer. Refine, adjust, repeat.</li>
+        </ol>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Scenarios ── -->
+  <section id="scenarios">
+    <div class="cgb-container">
+      <p class="cgb-section-label fade-in">The Scenarios</p>
+      <h2 class="cgb-section-title fade-in">Day-in-the-life scenarios</h2>
+      <p class="cgb-section-intro fade-in">Explore how different roles use Copilot Chat throughout their day.</p>
+
+      <div class="tabs-bar fade-in" role="tablist">
+        <button class="tab-btn active" onclick="switchTab(this, 'tab-executive')" role="tab" aria-selected="true">👔 Executive</button>
+        <button class="tab-btn" onclick="switchTab(this, 'tab-manager')" role="tab" aria-selected="false">📋 Manager</button>
+        <button class="tab-btn" onclick="switchTab(this, 'tab-ic')" role="tab" aria-selected="false">💼 Individual Contributor</button>
+        <button class="tab-btn" onclick="switchTab(this, 'tab-frontline')" role="tab" aria-selected="false">🏪 Frontline</button>
+      </div>
+
+      <!-- Executive -->
+      <div id="tab-executive" class="tab-panel active" role="tabpanel">
+        <ul class="timeline">
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">☀️</span>
+            <div class="timeline-content">
+              <h4>Morning Briefing</h4>
+              <p>Paste overnight news articles into Copilot and get an instant briefing.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">Summarize the top 5 news stories from today related to the consumer packaged goods industry, grocery retail trends, and consumer spending behavior. Focus on anything involving major retailers like Walmart, Kroger, or Target, or shifts in private label vs. branded products. Format as a numbered list with one sentence per story and a brief 'why it matters for our business' note for each.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">📊</span>
+            <div class="timeline-content">
+              <h4>Meeting Prep</h4>
+              <p>Upload a board deck and prepare for tough questions.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">I'm the VP of Sales at a CPG snack company preparing for our quarterly executive leadership meeting. Our key metrics this quarter: <span style="color:var(--accent);font-style:italic;">[e.g., $48M revenue, 12% YoY growth, 34% market share in salty snacks]</span>. Create 5 talking points that address: year-over-year revenue growth by channel (grocery, club, convenience), promotional ROI from our Q2 trade spend, competitive share movement in the salty snacks category, and our distribution expansion strategy for H2. Keep the tone confident and data-driven. Format as a bulleted list with bold headers.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">✉️</span>
+            <div class="timeline-content">
+              <h4>Communication</h4>
+              <p>Draft company-wide communications quickly.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">Draft an email to our 150-person sales organization announcing the launch of our new direct-store-delivery (DSD) pilot program in the Southeast region. The audience is field sales reps, regional managers, and broker partners. Strike a tone that's energizing but clear — explain why we're piloting DSD, what it means for their territory, and what support they'll receive. Keep it under 300 words with a clear call-to-action to attend a kickoff webinar.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">🧠</span>
+            <div class="timeline-content">
+              <h4>Strategic Thinking</h4>
+              <p>Use Think Deeper for complex competitive analysis.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">Think deeper: Private label products now represent 23% of the snack category at our top 3 retail accounts, up from 18% two years ago. Analyze what this trend means for our branded portfolio over the next 12 months. Consider pricing strategy implications, innovation pipeline priorities, retailer negotiation leverage, and where we should invest in brand-building vs. trade promotion. Format as a structured analysis with headers for each area.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Manager -->
+      <div id="tab-manager" class="tab-panel" role="tabpanel">
+        <ul class="timeline">
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">☀️</span>
+            <div class="timeline-content">
+              <h4>Team Standup Prep</h4>
+              <p>Generate a structured agenda in seconds.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">Create an agenda for a 15-minute Monday morning sales huddle with my team of 8 territory reps covering grocery and convenience accounts. Include sections for: last week's wins (top account gains or promotional results), this week's priorities (key store visits, buyer meetings, or reset activities), and any blockers needing escalation (out-of-stocks, pricing issues, distributor problems). Format as a reusable template. Keep each section to 2-3 bullet points max.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">📝</span>
+            <div class="timeline-content">
+              <h4>Documentation</h4>
+              <p>Turn meeting transcripts into structured action items.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">I just finished a 45-minute joint business planning session with the <span style="color:var(--accent);font-style:italic;">[e.g., Kroger]</span> category manager for our snack portfolio. Here are my notes from the meeting: <span style="color:var(--accent);font-style:italic;">[paste your meeting notes here]</span>. Transform these into a professional meeting summary with three sections: Key Decisions Made (table format), Action Items (table with Owner, Task, Due Date columns), and Open Questions for the Next Review (bulleted list).<span class="copy-hint">Click to copy</span></div>
+              <div class="sample-file-link" style="margin-top:0.5rem;">
+                <a href="#" onclick="downloadSample('Meeting-Notes-Category-Review.txt'); return false;" style="font-size:0.78rem; color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem;">
+                  📥 <span style="text-decoration:underline;">Download sample file</span> <span style="color:var(--text-meta);">(Meeting-Notes-Category-Review.txt)</span>
+                </a>
+              </div>
+            </div>
+          </li>
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">👥</span>
+            <div class="timeline-content">
+              <h4>People Management</h4>
+              <p>Build feedback templates and development plans.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">I'm a regional sales manager preparing for quarterly performance reviews with my team of <span style="color:var(--accent);font-style:italic;">[e.g., 8]</span> territory reps covering <span style="color:var(--accent);font-style:italic;">[e.g., grocery and convenience]</span> accounts. Create a structured feedback template tailored to CPG field sales that includes: Sales Performance &amp; Impact (3 bullets covering quota attainment, distribution gains, and key account wins), Growth Opportunities (2 bullets with specific development actions like buyer presentation skills or category management knowledge), Goals for Next Quarter (3 measurable goals tied to revenue, distribution, and retailer satisfaction), and a Coaching Notes section. Use a supportive and growth-oriented tone.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">📊</span>
+            <div class="timeline-content">
+              <h4>Reporting</h4>
+              <p>Synthesize raw data into executive summaries.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">Create a Q2 territory performance summary for my VP of Sales. Our team of <span style="color:var(--accent);font-style:italic;">[e.g., 8]</span> reps covers <span style="color:var(--accent);font-style:italic;">[e.g., 1,200]</span> grocery and convenience store accounts across the <span style="color:var(--accent);font-style:italic;">[e.g., Midwest]</span> region. Here are our key numbers: <span style="color:var(--accent);font-style:italic;">[paste your quarterly metrics or upload your performance spreadsheet]</span>. Include sections for: Key Metrics (format as a table with Metric, Target, Actual, % to Goal columns — include metrics for revenue, distribution points, void closure rate, and promotional compliance), Top Achievements (3-4 bullets highlighting specific account wins), Challenges &amp; Mitigations (2-3 bullets about competitive threats or execution gaps), and Priorities for Q3 (numbered list). Keep the tone professional and results-focused.<span class="copy-hint">Click to copy</span></div>
+              <div class="sample-file-link" style="margin-top:0.5rem;">
+                <a href="#" onclick="downloadSample('Q2-Territory-Metrics.csv'); return false;" style="font-size:0.78rem; color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem;">
+                  📥 <span style="text-decoration:underline;">Download sample file</span> <span style="color:var(--text-meta);">(Q2-Territory-Metrics.csv)</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- IC -->
+      <div id="tab-ic" class="tab-panel" role="tabpanel">
+        <ul class="timeline">
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">☀️</span>
+            <div class="timeline-content">
+              <h4>Email Triage</h4>
+              <p>Quickly categorize a large inbox by priority.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">I have <span style="color:var(--accent);font-style:italic;">[e.g., 40+]</span> unread emails from the past 3 days related to my territory accounts, broker communications, and internal updates. Here are the subject lines and senders: <span style="color:var(--accent);font-style:italic;">[paste your email subject lines and senders here]</span>. Categorize them into three priority tiers: 🔴 Respond Today (buyer requests, out-of-stock alerts, pricing issues), 🟡 Respond This Week (promotional recaps, new item setup requests, broker check-ins), and 🟢 FYI Only (corporate newsletters, HR updates, training announcements). Format as a table with columns for Priority, Subject, Sender, and Suggested Action.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">🔬</span>
+            <div class="timeline-content">
+              <h4>Research</h4>
+              <p>Run fast competitive analysis across tools and vendors.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">I'm preparing for a category review meeting with the snack buyer at <span style="color:var(--accent);font-style:italic;">[e.g., FreshMart Grocery]</span>. Compare our brand's salty snack portfolio performance against our top 2 competitors — <span style="color:var(--accent);font-style:italic;">[e.g., Kind Snacks and RXBAR]</span> — in the natural/better-for-you segment. Create a comparison framework with columns for Brand, Dollar Share Trend (directional), Key Product Innovation, Shopper Demographics, Promotional Strategy, and Retailer Margin Position. End with 3 talking points on why increasing our shelf space would benefit their category growth.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">✍️</span>
+            <div class="timeline-content">
+              <h4>Content Creation</h4>
+              <p>Draft long-form content with specific audience targeting.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">Write a compelling one-page sales story for my top prospect — <span style="color:var(--accent);font-style:italic;">[e.g., a 50-store regional grocery chain]</span> that currently doesn't carry our brand. Target audience: the VP of Procurement who values category growth data and speed-to-shelf. Include sections for: Why Our Brand (3 bullets on consumer demand, brand awareness, and product differentiation), Category Impact (2 bullets with industry growth data for our segment), Retailer Support (3 bullets on our promotional programs, merchandising support, and delivery capabilities). Use a professional, consultative tone. Keep it under 400 words.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">📄</span>
+            <div class="timeline-content">
+              <h4>Document Review</h4>
+              <p>Get AI-powered analysis of proposals and reports.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">Review the attached trade promotion proposal for our Q3 <span style="color:var(--accent);font-style:italic;">[e.g., Kroger]</span> program and provide structured feedback. Identify: 3 strengths of the proposal, any gaps in the ROI projections (missing costs, unrealistic lift assumptions, or incomplete competitive context), suggestions to strengthen the executive summary for the buyer, and any risks around timing or inventory readiness that aren't addressed. Format your feedback as a table with columns for Section, Finding, and Recommendation.<span class="copy-hint">Click to copy</span></div>
+              <div class="sample-file-link" style="margin-top:0.5rem;">
+                <a href="#" onclick="downloadSample('Q3-Trade-Promo-Proposal.txt'); return false;" style="font-size:0.78rem; color:var(--accent); text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem;">
+                  📥 <span style="text-decoration:underline;">Download sample file</span> <span style="color:var(--text-meta);">(Q3-Trade-Promo-Proposal.txt)</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Frontline -->
+      <div id="tab-frontline" class="tab-panel" role="tabpanel">
+        <ul class="timeline">
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">☀️</span>
+            <div class="timeline-content">
+              <h4>Shift Prep</h4>
+              <p>Generate opening checklists customized to your location.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">Create a comprehensive store visit checklist for a CPG merchandiser visiting a grocery account. Include sections for: Shelf Conditions (4 items — check facings, tag accuracy, out-of-stocks, competitor encroachment), Display &amp; Promotional Compliance (4 items — verify endcap placement, check signage, confirm promotional pricing, assess secondary placements), Backroom &amp; Inventory (3 items — check backstock levels, identify aged inventory, verify new item receipt), and Communication (3 items — check in with store manager, note competitor activity, log visit in CRM). Format each item as a checkbox-style line. Keep the language simple and action-oriented.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">📋</span>
+            <div class="timeline-content">
+              <h4>Quick Reference</h4>
+              <p>Get instant, customer-friendly explanations of policies.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">Explain our standard product return and credit policy for retail store partners in simple, clear language. Cover these scenarios: damaged product found on shelf, product past expiration date, product recalled by company, and overstock/discontinued items. Format as a quick-reference card with each scenario as a separate section including What to Do and Who to Contact. Use a helpful, professional tone that I can reference while talking to a store manager.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">📝</span>
+            <div class="timeline-content">
+              <h4>Incident Reporting</h4>
+              <p>Draft structured incident reports quickly on the floor.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">Help me write a store visit report for a priority account. Details: Visited <span style="color:var(--accent);font-style:italic;">[e.g., FreshMart Store #247]</span> today and found significant competitive encroachment — <span style="color:var(--accent);font-style:italic;">[describe what you found, e.g., competitor has taken over 4 additional shelf facings]</span> in the snack aisle that were previously allocated to our brand. <span style="color:var(--accent);font-style:italic;">[describe any other issues, e.g., their new promotional endcap is at the aisle entrance, our signage was removed]</span>. I spoke with the store manager who said <span style="color:var(--accent);font-style:italic;">[what the manager told you, e.g., the competitor's broker arranged it last week]</span>. Format the report with sections for: Visit Summary, Store/Date/Time, Shelf Conditions Found, Competitive Activity Observed, Actions Taken, Photos Needed (leave blank), and Recommended Follow-Up with the buyer.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+          <li class="timeline-item fade-in">
+            <span class="timeline-icon">📚</span>
+            <div class="timeline-content">
+              <h4>Training</h4>
+              <p>Create on-the-go training guides for new processes.</p>
+              <div class="prompt-text" onclick="copyPrompt(this)" style="margin-top:0.6rem;">I need to learn our new mobile order management and void reporting process. Create a step-by-step training guide I can follow on my phone during store visits. Include: equipment and app requirements, how to log into the order management system, steps for placing a suggested order based on shelf conditions, how to report and photograph product voids, how to submit a competitive activity alert, and how to close out and sync a store visit. Use numbered steps with brief descriptions. Keep each step to 1-2 sentences max.<span class="copy-hint">Click to copy</span></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Get Started ── -->
+  <section id="get-started">
+    <div class="cgb-container">
+      <div style="max-width:960px;margin:0 auto;">
+        <p class="cgb-section-label fade-in">Getting Started</p>
+        <h2 class="cgb-section-title fade-in">Getting started checklist</h2>
+        <p class="cgb-section-intro fade-in" style="max-width:100%;">Complete these milestones to build your Copilot Chat confidence. Your progress is saved automatically.</p>
+
+        <div class="progress-label fade-in"><span id="cgb-progress-count">0</span>/10 complete</div>
+        <div class="progress-bar-wrapper fade-in">
+          <div class="progress-bar" id="cgb-progress-bar"></div>
+        </div>
+
+        <ul class="checklist">
+          <li class="checklist-item fade-in" data-check="0">
+            <div class="checklist-checkbox" onclick="toggleCheck(this)" role="checkbox" aria-checked="false" tabindex="0"></div>
+            <div class="checklist-text"><div class="checklist-title">Open Copilot Chat</div><div class="checklist-desc">Visit m365copilot.com and sign in with your work account</div></div>
+          </li>
+          <li class="checklist-item fade-in" data-check="1">
+            <div class="checklist-checkbox" onclick="toggleCheck(this)" role="checkbox" aria-checked="false" tabindex="0"></div>
+            <div class="checklist-text"><div class="checklist-title">Verify the green shield</div><div class="checklist-desc">Look for the green EDP shield in the top right — it means your data is protected</div></div>
+          </li>
+          <li class="checklist-item fade-in" data-check="2">
+            <div class="checklist-checkbox" onclick="toggleCheck(this)" role="checkbox" aria-checked="false" tabindex="0"></div>
+            <div class="checklist-text"><div class="checklist-title">Ask your first question</div><div class="checklist-desc">Try a web-grounded prompt like "What are the latest trends in my industry?"</div></div>
+          </li>
+          <li class="checklist-item fade-in" data-check="3">
+            <div class="checklist-checkbox" onclick="toggleCheck(this)" role="checkbox" aria-checked="false" tabindex="0"></div>
+            <div class="checklist-text"><div class="checklist-title">Upload a document</div><div class="checklist-desc">Click the '+' button and upload a PDF or Word doc, then ask a question about it</div></div>
+          </li>
+          <li class="checklist-item fade-in" data-check="4">
+            <div class="checklist-checkbox" onclick="toggleCheck(this)" role="checkbox" aria-checked="false" tabindex="0"></div>
+            <div class="checklist-text"><div class="checklist-title">Use the '/' shortcut</div><div class="checklist-desc">Type '/' in the prompt box to reference a file from your Microsoft 365 content</div></div>
+          </li>
+          <li class="checklist-item fade-in" data-check="5">
+            <div class="checklist-checkbox" onclick="toggleCheck(this)" role="checkbox" aria-checked="false" tabindex="0"></div>
+            <div class="checklist-text"><div class="checklist-title">Try different models</div><div class="checklist-desc">Switch between Auto, Quick Response, and Think Deeper to see how answers change</div></div>
+          </li>
+          <li class="checklist-item fade-in" data-check="6">
+            <div class="checklist-checkbox" onclick="toggleCheck(this)" role="checkbox" aria-checked="false" tabindex="0"></div>
+            <div class="checklist-text"><div class="checklist-title">Generate an image</div><div class="checklist-desc">Ask Copilot to create an image for a presentation or team communication</div></div>
+          </li>
+          <li class="checklist-item fade-in" data-check="7">
+            <div class="checklist-checkbox" onclick="toggleCheck(this)" role="checkbox" aria-checked="false" tabindex="0"></div>
+            <div class="checklist-text"><div class="checklist-title">Create a Copilot Page</div><div class="checklist-desc">Click 'Edit in Pages' on a response you like to turn it into a shareable document</div></div>
+          </li>
+          <li class="checklist-item fade-in" data-check="8">
+            <div class="checklist-checkbox" onclick="toggleCheck(this)" role="checkbox" aria-checked="false" tabindex="0"></div>
+            <div class="checklist-text"><div class="checklist-title">Try Copilot in Teams or Outlook</div><div class="checklist-desc">Open Copilot Chat from the left nav in Teams or the side pane in Outlook</div></div>
+          </li>
+          <li class="checklist-item fade-in" data-check="9">
+            <div class="checklist-checkbox" onclick="toggleCheck(this)" role="checkbox" aria-checked="false" tabindex="0"></div>
+            <div class="checklist-text"><div class="checklist-title">Explore an agent</div><div class="checklist-desc">Browse the agent catalog from the sidebar and try a prebuilt agent</div></div>
+          </li>
+        </ul>
+
+        <div class="congrats-msg" id="cgb-congrats-msg">
+          <span class="congrats-emoji">🎉</span>
+          <strong>Congratulations!</strong> You've completed all 10 milestones. You're now a Copilot Chat power user!
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Closing ── -->
+  <section class="closing" style="padding: 3rem 0; text-align: center;">
+    <div class="cgb-container">
+      <h2 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 500; margin-bottom: 1rem;">You're ready to go</h2>
+      <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.5rem; font-size: 1rem;">You've explored the features, learned the framework, and practiced your prompts. Time to put it all to work.</p>
+      <a href="https://m365copilot.com" target="_blank" rel="noopener" class="cgb-btn-primary" style="font-size: 1rem; padding: 0.85rem 2rem;">Open Copilot Chat →</a>
+    </div>
+  </section>
+
+  <!-- ── Disclaimer ── -->
+  <div class="cgb-disclaimer fade-in">
+    <p>Built using Microsoft's published documentation and training resources. Not an official Microsoft product. Screenshots are illustrative and may differ from the current product experience.</p>
+  </div>
+
+  <button class="cgb-back-to-top" id="cgb-back-to-top" aria-label="Back to top" data-pagefind-ignore>↑</button>
+  <div class="cgb-toast" id="cgb-toast" data-pagefind-ignore>Copied!</div>
+</div>
+
+<style>
+  /* ── Local font tokens (the site uses literal font stacks; the guide CSS
+        references these custom properties) ── */
+  .cgb-root {
+    --font-heading: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'Commit Mono', monospace;
+  }
+  .cgb-root img { max-width: 100%; display: block; }
+
+  /* ── Layout container ── */
+  .cgb-container { max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
+
+  /* ── Guide sub-navigation ── */
+  .cgb-subnav {
+    position: sticky;
+    top: 56px;
+    z-index: 90;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border-bottom: 1px solid var(--border);
+  }
+  .cgb-subnav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 46px;
+    gap: 1rem;
+  }
+  .cgb-subnav-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+  .cgb-subnav-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+  .cgb-subnav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+  }
+  .cgb-subnav-links a {
+    display: block;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: color 0.2s, background 0.2s;
+  }
+  .cgb-subnav-links a:hover,
+  .cgb-subnav-links a.active {
+    color: var(--accent);
+    background: var(--accent-subtle);
+  }
+  @media (max-width: 768px) {
+    .cgb-subnav-brand { display: none; }
+  }
+
+  /* ── Scroll progress ── */
+  .cgb-scroll-progress {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    height: 3px;
+    background: var(--accent);
+    z-index: 95;
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  /* ── Hero ── */
+  .cgb-hero {
+    position: relative;
+    padding: 4rem 0 3rem;
+    text-align: center;
+    overflow: hidden;
+  }
+  .cgb-hero::before,
+  .cgb-hero::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .cgb-hero::before {
+    width: 600px; height: 600px;
+    top: -200px; left: 50%;
+    transform: translateX(-70%);
+    background: radial-gradient(circle, var(--bg-hero-glow-1) 0%, transparent 70%);
+  }
+  .cgb-hero::after {
+    width: 500px; height: 500px;
+    top: -100px; left: 50%;
+    transform: translateX(20%);
+    background: radial-gradient(circle, var(--bg-hero-glow-2) 0%, transparent 70%);
+  }
+  .cgb-hero-content { position: relative; z-index: 1; }
+  .cgb-hero-stamp {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-meta);
+    margin-bottom: 1.5rem;
+  }
+  .cgb-hero h1 {
+    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 0.85rem;
+  }
+  .cgb-hero-tagline {
+    max-width: 620px;
+    margin: 0 auto 2.5rem;
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+  .cgb-hero-ctas {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .cgb-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.75rem 1.75rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none;
+  }
+  .cgb-btn-primary:hover { background: var(--accent-hover); color: #fff; transform: translateY(-1px); }
+  .cgb-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.75rem 1.75rem;
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    text-decoration: none;
+  }
+  .cgb-btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Sections ── */
+  section { padding: 3rem 0; }
+  .cgb-section-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+  .cgb-section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    font-weight: 500;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  .cgb-section-intro {
+    color: var(--text-secondary);
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  /* ── Callouts ── */
+  .callout {
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    margin: 1rem 0;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    border-left: 4px solid;
+  }
+  .callout-note { background: var(--callout-note-bg); border-color: var(--callout-note-border); }
+  .callout-tip { background: var(--callout-tip-bg); border-color: var(--callout-tip-border); }
+  .callout-warn { background: var(--callout-warn-bg); border-color: var(--callout-warn-border); }
+  .callout-title { font-weight: 600; margin-bottom: 0.2rem; }
+  .cgb-edp-shield { vertical-align: -4px; margin-right: 0.15rem; }
+
+  /* ── Access grid ── */
+  .access-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  .access-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.88rem;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+  .access-item:hover { border-color: var(--accent); background: var(--accent-subtle); }
+  .access-item .access-action {
+    margin-left: auto;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--accent);
+    white-space: nowrap;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  .access-item:hover .access-action { opacity: 1; }
+  .access-item::after {
+    content: '›';
+    font-size: 1.2rem;
+    color: var(--text-meta);
+    margin-left: auto;
+    transition: transform 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+  .access-item:hover::after { transform: translateX(3px); color: var(--accent); }
+  .access-icon { font-size: 1.3rem; flex-shrink: 0; }
+
+  /* ── Lightbox (static shell) ── */
+  .lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .lightbox-overlay.active { opacity: 1; pointer-events: all; }
+  .lightbox-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 85vh;
+    background: var(--bg-surface);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+    transform: scale(0.92);
+    transition: transform 0.25s ease;
+  }
+  .lightbox-overlay.active .lightbox-content { transform: scale(1); }
+  .lightbox-caption {
+    padding: 1rem 1.5rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: center;
+    border-top: 1px solid var(--border);
+    background: var(--bg-surface);
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    z-index: 10;
+  }
+  .lightbox-close:hover { background: rgba(0,0,0,0.7); }
+
+  /* ── Guide hero image ── */
+  .guide-hero-image {
+    margin: 1.5rem 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    position: relative;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .guide-hero-image:hover { border-color: var(--accent); box-shadow: var(--shadow-card-hover); }
+  .guide-hero-image::after {
+    content: '🔍 Click to enlarge';
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #fff;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(4px);
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .guide-hero-image:hover::after { opacity: 1; }
+  .guide-hero-image img { width: 100%; height: auto; display: block; }
+
+  /* ── Screenshot placeholder ── */
+  .screenshot-placeholder {
+    background: var(--bg-raised);
+    border: 2px dashed var(--border-strong);
+    border-radius: 12px;
+    padding: 3rem;
+    text-align: center;
+    color: var(--text-meta);
+    font-size: 0.85rem;
+    margin: 1.5rem 0;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .screenshot-placeholder .ss-icon { font-size: 1.6rem; }
+
+  /* ── Capability cards ── */
+  .capability-category { margin-bottom: 1.5rem; }
+  .capability-category h3 {
+    font-size: 1.35rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+  .capabilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    align-items: start;
+  }
+  .capability-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    transition: box-shadow 0.25s, border-color 0.25s;
+  }
+  .capability-card:hover { box-shadow: var(--shadow-card-hover); border-color: var(--border-strong); }
+  .capability-card.open { border-left: 3px solid var(--accent); }
+  .capabilities-grid.two-col { grid-template-columns: repeat(2, 1fr); }
+  .capability-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.1rem 1.25rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .capability-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .capability-info { flex: 1; min-width: 0; }
+  .capability-info h4 {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+  .capability-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+  .expand-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    font-weight: 300;
+  }
+  .capability-card.open .expand-icon { transform: rotate(45deg); }
+  .capability-detail { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+  .capability-detail-inner { padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--border); }
+  .collapse-btn {
+    display: none;
+    width: 100%;
+    padding: 0.55rem;
+    margin-top: 1rem;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .collapse-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .capability-card.open .collapse-btn { display: block; }
+  .prompt-example { margin-top: 0.75rem; }
+  .prompt-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-meta);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+  .prompt-text {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    line-height: 1.55;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .prompt-text:hover { border-color: var(--accent); }
+  .copy-hint {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .copy-hint::before { content: '📋 '; }
+  .prompt-text:hover .copy-hint { color: var(--accent); }
+  .capability-detail .screenshot-placeholder { aspect-ratio: 16 / 9; padding: 2rem; margin-top: 0.75rem; }
+
+  .capability-images { display: flex; gap: 0.75rem; margin-top: 0.75rem; flex-wrap: wrap; }
+  .capability-images .cap-img-item { flex: 1; min-width: 140px; text-align: center; cursor: pointer; }
+  .capability-images .cap-img-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .capability-images .cap-img-item:hover img { border-color: var(--accent); box-shadow: 0 2px 12px rgba(37,99,235,0.15); }
+  .cgb-zoomable { cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; }
+  .cgb-zoomable:hover { border-color: var(--accent); box-shadow: 0 2px 12px rgba(37,99,235,0.15); }
+  .capability-images .cap-img-label {
+    margin-top: 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── GCSE framework ── */
+  .gcse-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    padding: 2rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 2rem;
+  }
+  .gcse-item { text-align: center; cursor: help; transition: transform 0.2s; }
+  .gcse-item:hover { transform: translateY(-4px); }
+  .gcse-letter { font-family: var(--font-heading); font-size: 2.5rem; font-weight: 700; color: var(--accent); line-height: 1.1; }
+  .gcse-word { font-weight: 600; color: var(--text-primary); font-size: 1rem; margin: 0.25rem 0; }
+  .gcse-desc { color: var(--text-secondary); font-size: 0.82rem; line-height: 1.4; }
+
+  .highlight-goal { background: rgba(59, 130, 246, 0.18); border-radius: 3px; padding: 1px 4px; }
+  .highlight-context { background: rgba(168, 85, 247, 0.18); border-radius: 3px; padding: 1px 4px; }
+  .highlight-source { background: rgba(249, 115, 22, 0.18); border-radius: 3px; padding: 1px 4px; }
+  .highlight-expectations { background: rgba(34, 197, 94, 0.18); border-radius: 3px; padding: 1px 4px; }
+  [data-theme="dark"] .highlight-goal { background: rgba(96, 165, 250, 0.20); color: #93bbfc; }
+  [data-theme="dark"] .highlight-context { background: rgba(192, 132, 252, 0.20); color: #d4b5fd; }
+  [data-theme="dark"] .highlight-source { background: rgba(251, 146, 60, 0.20); color: #fdba74; }
+  [data-theme="dark"] .highlight-expectations { background: rgba(74, 222, 128, 0.20); color: #86efac; }
+
+  /* ── Prompt evolution stepper ── */
+  .evolve-stepper { margin-bottom: 2rem; }
+  .evolve-tabs { display: flex; gap: 0; margin-bottom: 0; position: relative; }
+  .evolve-tab {
+    flex: 1;
+    padding: 0.7rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    transition: all 0.25s ease;
+    text-align: center;
+    position: relative;
+  }
+  .evolve-tab:first-child { border-radius: 10px 0 0 0; }
+  .evolve-tab:last-child  { border-radius: 0 10px 0 0; }
+  .evolve-tab + .evolve-tab { border-left: none; }
+  .evolve-tab:hover { background: var(--bg-raised); }
+  .evolve-tab.active { color: var(--text-primary); background: var(--bg-raised); border-bottom-color: transparent; }
+  .evolve-tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; }
+  .evolve-tab[data-level="good"].active::after    { background: #eab308; }
+  .evolve-tab[data-level="better"].active::after  { background: #f97316; }
+  .evolve-tab[data-level="best"].active::after    { background: #22c55e; }
+  .evolve-tab .evolve-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.4rem; vertical-align: middle; }
+  .evolve-tab[data-level="good"]   .evolve-dot { background: #eab308; }
+  .evolve-tab[data-level="better"] .evolve-dot { background: #f97316; }
+  .evolve-tab[data-level="best"]   .evolve-dot { background: #22c55e; }
+  .evolve-panel-wrap {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+  .evolve-panel { display: none; padding: 1.5rem; animation: fadeIn 0.35s ease; }
+  .evolve-panel.active { display: block; }
+  .evolve-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .evolve-badge { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.7rem; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .evolve-badge.good    { background: #fef9c3; color: #854d0e; }
+  .evolve-badge.better  { background: #ffedd5; color: #9a3412; }
+  .evolve-badge.best    { background: #dcfce7; color: #166534; }
+  .gcse-pills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .gcse-pill { font-size: 0.68rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 999px; letter-spacing: 0.02em; }
+  .gcse-pill.goal         { background: #dbeafe; color: #1e40af; }
+  .gcse-pill.context      { background: #ede9fe; color: #5b21b6; }
+  .gcse-pill.source       { background: #ffedd5; color: #9a3412; }
+  .gcse-pill.expectations { background: #dcfce7; color: #166534; }
+  .evolve-prompt {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: var(--bg-raised);
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .evolve-prompt:hover { background: var(--accent-subtle); }
+  .evolve-whats-new {
+    margin-top: 0.85rem;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding: 0.5rem 0.75rem;
+    background: var(--bg-base);
+    border-radius: 6px;
+    border: 1px dashed var(--border);
+  }
+  .evolve-whats-new strong { color: var(--accent); }
+
+  /* ── Practice zone ── */
+  .practice-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; align-items: stretch; margin-bottom: 2rem; }
+  .practice-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    transition: box-shadow 0.25s, border-color 0.25s;
+    display: flex;
+    flex-direction: column;
+  }
+  .practice-card:hover { box-shadow: var(--shadow-card-hover); border-color: var(--border-strong); }
+  .practice-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+  .practice-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+  .practice-body h4 { font-family: var(--font-body); font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .practice-body p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 0.75rem; }
+  .practice-challenge { font-size: 0.82rem; font-weight: 600; color: var(--accent); margin-bottom: 0.5rem; }
+  .practice-textarea {
+    width: 100%;
+    height: 100px;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-raised);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    resize: vertical;
+    margin-bottom: 0.75rem;
+  }
+  .practice-actions { margin-top: auto; }
+
+  /* ── Cheat sheet ── */
+  .cheat-sheet {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 1.75rem 2rem;
+    box-shadow: var(--shadow-card);
+  }
+  .cheat-sheet h3 { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary); }
+  .cheat-sheet ol { list-style: none; counter-reset: cheat; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+  .cheat-sheet ol li { font-size: 0.88rem; line-height: 1.55; color: var(--text-secondary); }
+  .cheat-sheet ol li strong { color: var(--text-primary); }
+
+  .prompting-techniques { align-items: stretch; }
+  .prompting-techniques .capability-card { display: flex; flex-direction: column; }
+
+  /* ── Tabs (scenarios) ── */
+  .tabs-bar { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; overflow-x: auto; }
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--text-primary); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Timeline ── */
+  .timeline { padding: 0; list-style: none; }
+  .timeline-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 0.25rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .timeline-item:hover { background: var(--bg-raised); }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .timeline-content { flex: 1; }
+  .timeline-content h4 { font-family: var(--font-body); font-weight: 600; font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .timeline-content p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+  .timeline-content .prompt-text { margin-top: 0.6rem; }
+
+  /* ── Checklist ── */
+  .progress-bar-wrapper { background: var(--bg-raised); border-radius: 100px; height: 8px; margin-bottom: 2rem; overflow: hidden; }
+  .progress-bar { height: 100%; background: var(--accent); border-radius: 100px; transition: width 0.4s ease; width: 0%; }
+  .progress-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-meta); margin-bottom: 0.5rem; }
+  .checklist { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 0.85rem 1rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: border-color 0.2s, box-shadow 0.25s, background 0.2s;
+    cursor: pointer;
+  }
+  .checklist-item:hover { border-color: var(--border-strong); box-shadow: var(--shadow-card-hover); }
+  .checklist-item.completed { opacity: 0.7; }
+  .checklist-checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border-strong);
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    background: transparent;
+  }
+  .checklist-checkbox.checked { background: var(--accent); border-color: var(--accent); }
+  .checklist-checkbox.checked::after { content: '✓'; color: #fff; font-size: 0.75rem; font-weight: 700; }
+  .checklist-text { flex: 1; }
+  .checklist-title { font-weight: 600; font-size: 0.92rem; margin-bottom: 0.15rem; }
+  .checklist-desc { font-size: 0.82rem; color: var(--text-secondary); }
+  .congrats-msg {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+    background: var(--callout-tip-bg);
+    border: 1px solid var(--callout-tip-border);
+    border-radius: 12px;
+    margin-top: 1.5rem;
+    font-size: 1rem;
+  }
+  .congrats-msg.visible { display: block; }
+  .congrats-msg .congrats-emoji { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+
+  /* ── Resources grid ── */
+  .resources-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .resource-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.25s, border-color 0.25s, transform 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+  .resource-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .resource-card:hover::before { transform: scaleX(1); }
+  .resource-card:hover { box-shadow: var(--shadow-card-hover); border-color: var(--border-strong); transform: translateY(-2px); color: inherit; }
+  .resource-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .resource-card h4 { font-family: var(--font-body); font-weight: 600; font-size: 0.95rem; margin-bottom: 0.35rem; }
+  .resource-card p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+  .resource-card .ext-icon { position: absolute; top: 1rem; right: 1rem; color: var(--text-secondary); font-size: 0.85rem; }
+
+  /* ── Disclaimer ── */
+  .cgb-disclaimer { max-width: 640px; margin: 0 auto; padding: 0 2rem 1rem; text-align: center; }
+  .cgb-disclaimer p { font-size: 0.78rem; color: var(--text-meta); line-height: 1.6; }
+
+  /* ── Toast ── */
+  .cgb-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--bg-surface);
+    border: 1px solid var(--accent);
+    color: var(--text-primary);
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .cgb-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── Back to top ── */
+  .cgb-back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 150;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cgb-back-to-top.visible { opacity: 1; pointer-events: all; }
+  .cgb-back-to-top:hover { transform: translateY(-2px); }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .gcse-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 1.25rem; }
+    .evolve-tabs { flex-direction: column; }
+    .evolve-tab:first-child { border-radius: 10px 10px 0 0; }
+    .evolve-tab:last-child  { border-radius: 0; }
+    .evolve-tab + .evolve-tab { border-left: 1px solid var(--border); border-top: none; }
+    .practice-grid { grid-template-columns: 1fr; }
+    .cheat-sheet { padding: 1.25rem; }
+    .cgb-container { padding: 0 1.25rem; }
+    section { padding: 2.5rem 0; }
+    .cgb-hero { padding: 4rem 0 3rem; }
+    .access-grid { grid-template-columns: repeat(2, 1fr); }
+    .checklist { grid-template-columns: 1fr; }
+    .capabilities-grid { grid-template-columns: 1fr; }
+    .capabilities-grid.two-col { grid-template-columns: 1fr; }
+    .resources-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .cgb-hero-ctas { flex-direction: column; align-items: center; }
+    .access-grid { grid-template-columns: 1fr; }
+    .resources-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<!-- Global rules for dynamically-injected lightbox markup (no Astro scope id). -->
+<style is:global>
+  .cgb-root .lightbox-content img { display: block; max-width: 90vw; max-height: 80vh; object-fit: contain; }
+  .cgb-root .lightbox-content img.qr-image {
+    max-width: 320px;
+    max-height: 320px;
+    margin: 2rem auto;
+    display: block;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 12px;
+  }
+  .cgb-root .lightbox-content img.desktop-image {
+    padding: 2rem 1.5rem;
+    background: var(--bg-raised);
+    max-width: 80vw;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  .cgb-root .lightbox-multi { display: flex; gap: 1.5rem; padding: 1.5rem; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
+  .cgb-root .lightbox-multi-item { flex: 1; min-width: 280px; max-width: 48%; text-align: center; }
+  .cgb-root .lightbox-multi-item img { width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border); }
+  .cgb-root .lightbox-multi-label { margin-top: 0.5rem; font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.04em; text-transform: uppercase; }
+</style>
+
+<script>
+  (function () {
+    'use strict';
+
+    const IMG_BASE = '/images/guides/copilot-chat-basic/';
+    const HEADER_OFFSET = 56 + 46; // sticky site header + guide sub-nav
+
+    const root = document.querySelector('.cgb-root');
+    if (!root) return;
+
+    function resolveSrc(src) {
+      return src && src.charAt(0) === '/' ? src : IMG_BASE + src;
+    }
+
+    /* ── Sample file downloads ── */
+    const SAMPLE_FILES = {
+      'Meeting-Notes-Category-Review.txt': `Category Review Meeting Notes - Kroger Salty Snacks
+Date: [Today's Date]
+Attendees: Sarah Chen (Kroger Category Manager), Mike Torres (Our Regional Sales Director), You
+
+Key Discussion Points:
+- Kroger wants to reduce SKU count in salty snacks by 10% to improve shelf productivity
+- Our top 3 SKUs (Classic Sea Salt, BBQ Crunch, Ranch Dip Chips) are all performing above category average
+- Two underperforming SKUs flagged: Spicy Lime (below 60% ACV threshold) and Sweet Chili (declining velocity)
+- New product pitch: Protein Crisps line launching Q3 - buyer interested but wants margin data
+- Q3 promotional calendar: Kroger requested a BOGO event for back-to-school (Aug weeks 2-3)
+- Planogram reset scheduled for September - we may gain 2 additional facings if we cut the 2 underperformers
+- Buyer mentioned competitor Brand X is pitching an exclusive flavor for Kroger
+- Next review meeting tentatively scheduled for 8 weeks from now
+
+Open Items:
+- Need to send margin analysis for Protein Crisps line by Friday
+- Confirm promotional funding for back-to-school BOGO
+- Investigate Brand X exclusive flavor threat
+- Schedule follow-up with broker to align on planogram submission`,
+      'Q2-Territory-Metrics.csv': `Metric,Target,Actual,% to Goal
+Revenue ($M),6.2,5.8,93.5%
+Distribution Points (ACV %),78%,74%,94.9%
+New Store Authorizations,45,52,115.6%
+Void Closure Rate,85%,79%,92.9%
+Promotional Compliance,90%,88%,97.8%
+Shelf Condition Score,92,89,96.7%
+Avg Store Visits/Week/Rep,22,20,90.9%
+New SKU Placement Rate,70%,65%,92.9%`,
+      'Q3-Trade-Promo-Proposal.txt': `Q3 TRADE PROMOTION PROPOSAL — KROGER SALTY SNACKS
+Prepared by: [Your Name], Territory Sales Rep
+Date: [Today's Date]
+
+EXECUTIVE SUMMARY
+Proposing a multi-tactic Q3 promotional program across Kroger's 2,700 stores to drive salty snack category growth and increase our brand's share from 18.2% to 20%+ by end of Q3.
+
+PROMOTIONAL CALENDAR
+Week 1-2 (July): Back-to-School BOGO on Classic Sea Salt and BBQ Crunch (8oz bags)
+Week 5-6 (Aug): Temporary Price Reduction (TPR) $1.00 off Variety Packs (12ct)
+Week 9-10 (Sep): New item introduction — Protein Crisps with in-store sampling at top 200 locations
+
+PROJECTED ROI
+- Total trade investment: $425,000
+- Projected incremental revenue: $1.8M
+- Projected lift: 22% during promotional weeks
+- Estimated ROI: 4.2x
+
+MERCHANDISING SUPPORT
+- Secondary display (endcap) at 500 priority stores during BOGO period
+- Shelf talkers for new Protein Crisps at all stores
+- Digital circular feature for TPR weeks
+
+RISKS & CONSIDERATIONS
+- Inventory: Need 15% safety stock buffer for BOGO weeks based on prior year demand
+- Timing: Back-to-school window overlaps with competitor Brand X's annual promo
+- New item: Protein Crisps have no velocity history at Kroger
+
+REQUESTED BUYER ACTIONS
+1. Approve promotional calendar and funding allocation
+2. Confirm endcap placement at 500 stores
+3. Authorize new item setup for Protein Crisps (3 SKUs)`
+    };
+
+    window.downloadSample = function (filename) {
+      const content = SAMPLE_FILES[filename];
+      if (content == null) return;
+      const mimeType = filename.endsWith('.csv') ? 'text/csv' : 'text/plain';
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
+    /* ── Lightbox ── */
+    function openOverlay(html, caption) {
+      const overlay = document.getElementById('cgb-lightbox');
+      document.getElementById('cgb-lightbox-body').innerHTML = html;
+      document.getElementById('cgb-lightbox-caption').textContent = caption;
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    window.openLightbox = function (src, caption, type) {
+      const cls = type === 'desktop' ? 'desktop-image' : '';
+      const html = '<img src="' + resolveSrc(src) + '" alt="' + caption + '" class="' + cls + '" style="display:block;max-width:90vw;max-height:80vh;object-fit:contain;">';
+      openOverlay(html, caption);
+    };
+
+    window.openLightboxQR = function () {
+      const html = '<img src="' + resolveSrc('copilot-mobile-qr.png') + '" alt="QR code to download M365 Copilot mobile app" class="qr-image">';
+      openOverlay(html, 'Scan this QR code with your phone to download the Microsoft 365 Copilot mobile app');
+    };
+
+    window.openLightboxTeams = function () {
+      const html =
+        '<div class="lightbox-multi">' +
+          '<div class="lightbox-multi-item">' +
+            '<img src="' + resolveSrc('copilot-teams-closed.png') + '" alt="Teams with Copilot Chat sidebar closed">' +
+            '<div class="lightbox-multi-label">Sidebar closed</div>' +
+          '</div>' +
+          '<div class="lightbox-multi-item">' +
+            '<img src="' + resolveSrc('copilot-teams-open.png') + '" alt="Teams with Copilot Chat sidebar open showing agents and chats">' +
+            '<div class="lightbox-multi-label">Sidebar open</div>' +
+          '</div>' +
+        '</div>';
+      openOverlay(html, 'Copilot Chat in Teams — click the Copilot icon in the left nav to toggle the sidebar');
+    };
+
+    function closeOverlay() {
+      const overlay = document.getElementById('cgb-lightbox');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    window.closeLightbox = function (e) {
+      const content = document.getElementById('cgb-lightbox-content');
+      if (e && e.target === content) return; // click inside content (not the close button)
+      if (e && content && content.contains(e.target)) {
+        if (e.target.classList.contains('lightbox-close') || (e.target.closest && e.target.closest('.lightbox-close'))) {
+          closeOverlay();
+        }
+        return;
+      }
+      closeOverlay();
+    };
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        const overlay = document.getElementById('cgb-lightbox');
+        if (overlay && overlay.classList.contains('active')) closeOverlay();
+      }
+    });
+
+    /* ── Practice reveal ── */
+    window.toggleReveal = function (btn) {
+      const actions = btn.closest('.practice-actions') || btn.parentElement;
+      const reveal = actions.querySelector('.practice-reveal');
+      const isOpen = reveal.style.display !== 'none' && reveal.style.display !== '';
+      reveal.style.display = isOpen ? 'none' : 'block';
+      btn.textContent = isOpen ? 'See our suggestion ▼' : 'Hide suggestion ▲';
+    };
+
+    /* ── Evolve stepper ── */
+    window.switchEvolve = function (level) {
+      root.querySelectorAll('.evolve-tab').forEach(function (t) { t.classList.remove('active'); });
+      root.querySelectorAll('.evolve-panel').forEach(function (p) { p.classList.remove('active'); });
+      root.querySelector('.evolve-tab[data-level="' + level + '"]').classList.add('active');
+      document.getElementById('evolve-' + level).classList.add('active');
+    };
+
+    /* ── Capability card expand/collapse ── */
+    window.toggleCapability = function (header) {
+      const card = header.closest('.capability-card');
+      const detail = card.querySelector('.capability-detail');
+      const inner = detail.querySelector('.capability-detail-inner');
+      const wasOpen = card.classList.contains('open');
+      card.classList.toggle('open');
+      if (!wasOpen) {
+        detail.style.maxHeight = inner.scrollHeight + 'px';
+      } else {
+        detail.style.maxHeight = '0';
+        const rect = card.getBoundingClientRect();
+        if (rect.top < 0) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    };
+
+    // Inject collapse buttons into each capability detail.
+    root.querySelectorAll('.capability-detail-inner').forEach(function (inner) {
+      const btn = document.createElement('button');
+      btn.className = 'collapse-btn';
+      btn.textContent = '▲ Collapse';
+      btn.addEventListener('click', function () {
+        const card = inner.closest('.capability-card');
+        window.toggleCapability(card.querySelector('.capability-header'));
+      });
+      inner.appendChild(btn);
+    });
+
+    /* ── Tabs ── */
+    window.switchTab = function (btn, panelId) {
+      root.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+      root.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      const panel = document.getElementById(panelId);
+      panel.classList.add('active');
+      panel.querySelectorAll('.fade-in:not(.visible)').forEach(function (el) { fadeObserver.observe(el); });
+    };
+
+    /* ── Copy prompt ── */
+    window.copyPrompt = function (el) {
+      const clone = el.cloneNode(true);
+      clone.querySelectorAll('.copy-hint').forEach(function (n) { n.remove(); });
+      const text = clone.innerText.trim();
+      const hint = el.querySelector('.copy-hint');
+      function done() {
+        showToast('Copied!');
+        if (hint) { hint.textContent = 'Copied ✓'; setTimeout(function () { hint.textContent = 'Click to copy'; }, 1500); }
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(fallback);
+      } else {
+        fallback();
+      }
+      function fallback() {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (err) { /* no-op */ }
+        document.body.removeChild(ta);
+        done();
+      }
+    };
+
+    /* ── Toast ── */
+    let toastTimer;
+    function showToast(msg) {
+      const t = document.getElementById('cgb-toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { t.classList.remove('show'); }, 2000);
+    }
+
+    /* ── Checklist ── */
+    const STORAGE_KEY = 'copilot-guide-checklist';
+    let checks = [];
+    try { checks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch (e) { checks = []; }
+    if (!Array.isArray(checks) || checks.length !== 10) checks = new Array(10).fill(false);
+
+    function renderChecklist() {
+      const items = root.querySelectorAll('.checklist-item');
+      let done = 0;
+      items.forEach(function (item, i) {
+        const cb = item.querySelector('.checklist-checkbox');
+        if (checks[i]) {
+          cb.classList.add('checked');
+          cb.setAttribute('aria-checked', 'true');
+          item.classList.add('completed');
+          done++;
+        } else {
+          cb.classList.remove('checked');
+          cb.setAttribute('aria-checked', 'false');
+          item.classList.remove('completed');
+        }
+      });
+      document.getElementById('cgb-progress-count').textContent = done;
+      document.getElementById('cgb-progress-bar').style.width = (done / 10 * 100) + '%';
+      document.getElementById('cgb-congrats-msg').classList.toggle('visible', done === 10);
+    }
+
+    window.toggleCheck = function (cb) {
+      const item = cb.closest('.checklist-item');
+      const idx = parseInt(item.getAttribute('data-check'), 10);
+      checks[idx] = !checks[idx];
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(checks)); } catch (e) { /* no-op */ }
+      cb.style.transform = 'scale(1.2)';
+      setTimeout(function () { cb.style.transform = ''; }, 200);
+      renderChecklist();
+    };
+
+    renderChecklist();
+
+    /* ── Fade-in on scroll ── */
+    const fadeObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          const idx = Array.from(root.querySelectorAll('.fade-in:not(.visible)')).indexOf(entry.target);
+          const delay = Math.max(0, idx) * 60;
+          setTimeout(function () { entry.target.classList.add('visible'); }, Math.min(delay, 300));
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    root.querySelectorAll('.fade-in').forEach(function (el) { fadeObserver.observe(el); });
+
+    /* ── Active sub-nav link ── */
+    const sections = root.querySelectorAll('section[id]');
+    const navLinks = root.querySelectorAll('.cgb-subnav-links a');
+    const navObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          navLinks.forEach(function (link) {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, { rootMargin: '-120px 0px -55% 0px', threshold: 0 });
+    sections.forEach(function (s) { navObserver.observe(s); });
+
+    /* ── Smooth scroll for in-page anchors (offset for sticky chrome) ── */
+    root.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        const id = a.getAttribute('href').slice(1);
+        if (!id) return;
+        const target = document.getElementById(id);
+        if (!target) return;
+        e.preventDefault();
+        const y = target.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      });
+    });
+
+    /* ── Scroll progress & back to top ── */
+    const progressBar = document.getElementById('cgb-scroll-progress');
+    const backToTop = document.getElementById('cgb-back-to-top');
+    if (backToTop) backToTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    window.addEventListener('scroll', function () {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      if (progressBar) progressBar.style.width = scrollPercent + '%';
+      if (backToTop) backToTop.classList.toggle('visible', scrollTop > 400);
+    }, { passive: true });
+  })();
+</script>

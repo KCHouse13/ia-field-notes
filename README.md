@@ -36,7 +36,7 @@ npm run preview
 - **Field Notes** — Short-form observations from real AI deployments
 - **Use Cases** — Scenario-based examples of AI in practice
 - **Guides** — Step-by-step walkthroughs
-- **News & Updates** — Curated summaries of what changed and why it matters
+- **News** — A curated roll-up of official Microsoft 365 Copilot announcements that links out to the source
 
 ## Contributing
 

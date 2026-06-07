@@ -2,10 +2,10 @@
 const pathname = Astro.url.pathname;
 
 const navLinks = [
-  { label: 'Field Notes', href: '/field-notes/' },
-  { label: 'Use Cases', href: '/use-cases/' },
   { label: 'Guides', href: '/guides/' },
+  { label: 'Use Cases', href: '/use-cases/' },
   { label: 'News', href: '/news/' },
+  { label: 'Field Notes', href: '/field-notes/' },
   { label: 'About', href: '/about/' },
 ];
 
@@ -17,8 +17,7 @@ function isActive(href: string): boolean {
 <nav class="nav">
   <div class="nav-inner">
     <a href="/" class="nav-logo">
-      <span class="logo-mark">IA</span>
-      Field Notes
+      Intelligence,&nbsp;<span class="nav-logo-accent">amplified</span>
     </a>
 
     <div class="nav-links">
@@ -30,10 +29,9 @@ function isActive(href: string): boolean {
     </div>
 
     <div class="nav-actions">
-      <button class="cmd-search" aria-label="Search (Ctrl+K)" data-search-trigger data-search-shortcut-button>
+      <button class="cmd-search" aria-label="Search" data-search-trigger>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         Search
-        <kbd data-search-shortcut>Ctrl+K</kbd>
       </button>
 
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
@@ -88,16 +86,19 @@ function isActive(href: string): boolean {
   }
 
   .nav-logo {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.85rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.35rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    letter-spacing: -0.01em;
     color: var(--text-primary);
     text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+  }
+
+  .nav-logo-accent {
+    color: var(--accent);
+    font-style: italic;
   }
 
   .logo-mark {

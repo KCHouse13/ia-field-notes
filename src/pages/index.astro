@@ -18,6 +18,19 @@ try {
 }
 
 const hasNotes = fieldNotes.length > 0;
+
+// Count published guides for the category tile
+let guidesCount = 0;
+try {
+  const { getCollection } = await import('astro:content');
+  const allGuides = await getCollection('guides');
+  guidesCount = allGuides.filter((g: any) => !g.data.draft).length;
+} catch {
+  // Collection empty or not configured
+}
+const guidesCountText = guidesCount > 0
+  ? `${guidesCount} guide${guidesCount === 1 ? '' : 's'} →`
+  : 'Browse guides →';
 ---
 
 <BaseLayout
@@ -76,7 +89,7 @@ const hasNotes = fieldNotes.length > 0;
         description="Step-by-step walkthroughs for getting value from Microsoft 365 Copilot, agents, and adjacent tools."
         href="/guides/"
         icon="▲"
-        countText="8 guides →"
+        countText={guidesCountText}
       />
       <CategoryTile
         title="News & Updates"

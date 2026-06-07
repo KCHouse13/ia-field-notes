@@ -24,7 +24,7 @@ IA Field Notes has a structured content pipeline. Content is written by Sawyer o
 |------|--------|-----------|------------|
 | Field Notes | Sawyer | SKILL-fieldnote-writer.md | src/content/field-notes/ |
 | Use Cases | Sawyer | SKILL-usecase-writer.md | src/content/use-cases/ |
-| News | Sawyer | SKILL-news-curator.md | src/content/news/ |
+| News | Sawyer | SKILL-news-curator.md | src/data/news.ts |
 | Guides | Quinn | SKILL-guide-builder.md | src/content/guides/ |
 | Prompt Library | Quinn | SKILL-prompt-library.md | src/content/prompt-library/ |
 

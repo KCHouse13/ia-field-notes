@@ -58,7 +58,7 @@ How to decide who handles what on the IA Field Notes project.
 | `src/pages/**` | Finch | Page routing |
 | `src/content/field-notes/**` | Sawyer | Field note content |
 | `src/content/use-cases/**` | Sawyer | Use case content |
-| `src/content/news/**` | Sawyer | News content |
+| `src/data/news.ts` | Sawyer | News roll-up data |
 | `src/content/guides/**` | Quinn | Guide content |
 | `src/content/prompt-library/**` | Quinn | Prompt library content |
 | `.github/workflows/**` | Reeve | CI/CD workflows |

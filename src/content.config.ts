@@ -39,20 +39,7 @@ const guides = defineCollection({
     excerpt: z.string(),
     draft: z.boolean().default(false),
     tags: z.array(z.string()),
-  }),
-});
-
-const news = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/news' }),
-  schema: z.object({
-    title: z.string(),
-    date: z.date(),
-    source: z.string(),
-    sourceUrl: z.string().url(),
-    readTime: z.string(),
-    excerpt: z.string(),
-    draft: z.boolean().default(false),
-    tags: z.array(z.string()),
+    width: z.enum(['standard', 'wide']).default('standard'),
   }),
 });
 
@@ -73,6 +60,5 @@ export const collections = {
   'field-notes': fieldNotes,
   'use-cases': useCases,
   'guides': guides,
-  'news': news,
   'prompt-library': promptLibrary,
 };

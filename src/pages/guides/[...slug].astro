@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
+import GuideWideLayout from '../../layouts/GuideWideLayout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('guides');
@@ -12,9 +13,11 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+
+const Layout = post.data.width === 'wide' ? GuideWideLayout : PostLayout;
 ---
 
-<PostLayout
+<Layout
   title={post.data.title}
   date={post.data.date}
   topic={post.data.topic}
@@ -22,4 +25,4 @@ const { Content } = await render(post);
   description={post.data.excerpt}
 >
   <Content />
-</PostLayout>
+</Layout>

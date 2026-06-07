@@ -11,16 +11,10 @@ interface Props {
 
 const { title, slug, date, topic, description, collection = 'field-notes', readTime = '5 min read' } = Astro.props;
 const d = new Date(date);
-const year = d.getUTCFullYear();
-const dayOfYear = Math.floor((Date.UTC(year, d.getUTCMonth(), d.getUTCDate()) - Date.UTC(year, 0, 1)) / 86400000) + 1;
-const weekNum = Math.ceil(dayOfYear / 7);
-const stamp = `IA-${year}-W${String(weekNum).padStart(2, '0')}-001`;
 const formattedDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 ---
 
 <a href={`/${collection}/${slug}/`} class="field-note-card block">
-  <span class="stamp">{stamp}</span>
-
   {topic && <span class="topic-badge">{topic}</span>}
 
   <h3 class="card-title">{title}</h3>
@@ -51,14 +45,6 @@ const formattedDate = d.toLocaleDateString('en-US', { month: 'short', day: 'nume
   .field-note-card:hover {
     border-color: var(--accent);
     box-shadow: var(--shadow-card-hover);
-  }
-
-  .stamp {
-    font-family: 'Commit Mono', monospace;
-    font-size: 0.68rem;
-    color: var(--text-meta);
-    letter-spacing: 0.02em;
-    margin-bottom: 1rem;
   }
 
   .topic-badge {

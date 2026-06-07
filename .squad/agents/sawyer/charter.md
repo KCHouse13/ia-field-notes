@@ -13,14 +13,14 @@
 
 - Field note content (`src/content/field-notes/`)
 - Use case content (`src/content/use-cases/`)
-- News/update content (`src/content/news/`)
+- News roll-up data (`src/data/news.ts`)
 - Content drafting following SKILL file specifications
 
 ## How I Work
 
 - Field Notes: 300-600 words, structured as Context → Observation → Implication → Related
 - Use Cases: 600-1200 words, structured as Scenario → Problem → Approach → Outcome
-- News: 200-400 words, structured as What changed → Why it matters → What to do with it
+- News: a curated index of official Microsoft Copilot announcements that links out to the source. Maintained by appending entries to `src/data/news.ts` (one-sentence summaries), not internal articles. Follow SKILL-news-curator.md.
 - Always reference SKILL-brand.md for voice and banned words
 - Frontmatter must match the Zod schema exactly
 - No placeholder content — every draft is publishable quality

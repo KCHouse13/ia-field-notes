@@ -9,9 +9,14 @@ src/content/
 ├── field-notes/    → Short observations (300-600 words)
 ├── use-cases/      → Business scenarios (600-1200 words)
 ├── guides/         → Step-by-step walkthroughs (variable length)
-├── news/           → Curated updates (200-400 words)
 └── prompt-library/ → Reusable prompts (hidden in nav for v1)
 ```
+
+> **News is different.** The News section is a curated roll-up that links out to
+> official Microsoft sources, not internal articles. It is powered by a single
+> data module — `src/data/news.ts` — rather than a content collection. To add an
+> announcement, append an entry to that file. See `skills/SKILL-news-curator.md`
+> for the schema and workflow.
 
 ## Content Workflow
 
