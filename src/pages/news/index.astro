@@ -10,35 +10,11 @@ import {
   monthShort,
   yearOf,
   catLabel,
-  catColor,
 } from '../../data/news';
 
 const SECTION_TITLE = 'News';
 const SECTION_DESC =
   'A scannable roll-up of the official Microsoft 365 Copilot launches and feature updates, as well as related Microsoft Agent and Platform updates. Scan the latest, filter by timeframe and solution, and link straight to the source.';
-
-// hex -> rgba tint (matches the client-side helper)
-function tint(hex: string, a: number): string {
-  const n = parseInt(hex.slice(1), 16);
-  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
-}
-
-// ISO-week stamp for the hero, e.g. "2026-W23"
-function isoWeekStamp(d: Date): string {
-  const date = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
-  const dayNum = (date.getUTCDay() + 6) % 7;
-  date.setUTCDate(date.getUTCDate() - dayNum + 3);
-  const firstThursday = new Date(Date.UTC(date.getUTCFullYear(), 0, 4));
-  const week =
-    1 +
-    Math.round(
-      ((date.getTime() - firstThursday.getTime()) / 86400000 -
-        3 +
-        ((firstThursday.getUTCDay() + 6) % 7)) /
-        7,
-    );
-  return `${date.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
-}
 
 const sortedNews = [...NEWS].sort((a, b) => b.iso.localeCompare(a.iso));
 const latest = sortedNews.slice(0, 6);
@@ -47,7 +23,6 @@ const catCounts = CATEGORIES.map((c) => ({
   ...c,
   count: NEWS.filter((n) => n.cat === c.key).length,
 }));
-const lastUpdated = isoWeekStamp(new Date());
 
 // Pre-computed search haystack for each item (drives client-side text search)
 const searchOf = (n: (typeof NEWS)[number]) =>
@@ -58,7 +33,6 @@ const searchOf = (n: (typeof NEWS)[number]) =>
   <!-- ═══════════ HERO ═══════════ -->
   <header class="news-hero">
     <div class="news-container hero-content">
-      <div class="hero-stamp">Last updated · {lastUpdated}</div>
       <h1>{SECTION_TITLE}</h1>
       <p class="hero-tagline">{SECTION_DESC}</p>
     </div>
@@ -78,14 +52,14 @@ const searchOf = (n: (typeof NEWS)[number]) =>
       <div class="latest-wrap">
         {
           latest.map((n, i) => (
-            <a class="latest-item" href={n.url} target="_blank" rel="noopener">
+            <a class="latest-item" href={n.url} target="_blank" rel="noopener" data-cat={n.cat}>
               <span class="latest-date">{monthYear(n.iso)}</span>
-              <span class="latest-dot" style={`background:${catColor(n.cat)}`} />
+              <span class="latest-dot" style="background:var(--cat)" />
               <span class="latest-main">
                 <span class="latest-title">{n.title}</span>
                 <span class="latest-sub">
                   {i === 0 && <span class="new-pill">New</span>}
-                  <span class="latest-cat" style={`color:${catColor(n.cat)}`}>{catLabel(n.cat)}</span>
+                  <span class="latest-cat" style="color:var(--cat)">{catLabel(n.cat)}</span>
                   <span>· {SOURCES[n.source]}</span>
                 </span>
               </span>
@@ -170,7 +144,6 @@ const searchOf = (n: (typeof NEWS)[number]) =>
           />
         </label>
         <div class="tb-field">
-          <label for="filter-time">Timeframe</label>
           <select id="filter-time" class="tb-select" aria-label="Filter by timeframe">
             <option value="all">All time</option>
             <option value="3m">Last 3 months</option>
@@ -181,14 +154,12 @@ const searchOf = (n: (typeof NEWS)[number]) =>
           </select>
         </div>
         <div class="tb-field">
-          <label for="filter-cat">Solution</label>
           <select id="filter-cat" class="tb-select" aria-label="Filter by solution">
             <option value="all">All solutions</option>
             {catCounts.map((c) => <option value={c.key}>{`${c.label} (${c.count})`}</option>)}
           </select>
         </div>
         <div class="tb-field">
-          <label for="filter-sort">Sort</label>
           <select id="filter-sort" class="tb-select" aria-label="Sort">
             <option value="newest">Newest first</option>
             <option value="oldest">Oldest first</option>
@@ -235,11 +206,11 @@ const searchOf = (n: (typeof NEWS)[number]) =>
               data-search={searchOf(n)}
             >
               <button class="row-head" aria-expanded="false">
-                <span class="row-dot" style={`background:${catColor(n.cat)}`} />
+                <span class="row-dot" style="background:var(--cat)" />
                 <span class="row-title">{n.title}</span>
                 <span
                   class="row-cat"
-                  style={`background:${tint(catColor(n.cat), 0.13)};color:${catColor(n.cat)}`}
+                  style="background:var(--cat-tint);color:var(--cat)"
                 >
                   {catLabel(n.cat)}
                 </span>
@@ -289,7 +260,7 @@ const searchOf = (n: (typeof NEWS)[number]) =>
               <div class="news-top">
                 <span
                   class="cat-badge"
-                  style={`background:${tint(catColor(n.cat), 0.13)};color:${catColor(n.cat)}`}
+                  style="background:var(--cat-tint);color:var(--cat)"
                 >
                   {catLabel(n.cat)}
                 </span>
@@ -304,7 +275,7 @@ const searchOf = (n: (typeof NEWS)[number]) =>
               </div>
               <div class="news-foot">
                 <span class="news-source">
-                  <span class="latest-dot" style={`background:${catColor(n.cat)}`} />
+                  <span class="latest-dot" style="background:var(--cat)" />
                   {SOURCES[n.source]}
                 </span>
                 <span class="news-cta">
@@ -344,7 +315,8 @@ const searchOf = (n: (typeof NEWS)[number]) =>
   .news-hero {
     position: relative;
     padding: 3.25rem 0 1.25rem;
-    overflow: hidden;
+    overflow-x: clip;
+    overflow-y: visible;
   }
   .news-hero::before,
   .news-hero::after {
@@ -373,14 +345,6 @@ const searchOf = (n: (typeof NEWS)[number]) =>
   .hero-content {
     position: relative;
     z-index: 1;
-  }
-  .hero-stamp {
-    font-family: 'Commit Mono', 'Fira Code', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-meta);
-    margin-bottom: 1rem;
   }
   .news-hero h1 {
     font-family: 'Cormorant Garamond', Georgia, serif;
@@ -700,18 +664,6 @@ const searchOf = (n: (typeof NEWS)[number]) =>
     position: relative;
     display: flex;
     flex-direction: column;
-  }
-  .tb-field label {
-    position: absolute;
-    top: -0.55rem;
-    left: 0.6rem;
-    font-family: 'Commit Mono', 'Fira Code', monospace;
-    font-size: 0.56rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-meta);
-    background: var(--bar-bg);
-    padding: 0 0.3rem;
   }
   select.tb-select {
     appearance: none;

@@ -1,16 +1,9 @@
 ---
-const now = new Date();
-const year = now.getFullYear();
-const startOfYear = new Date(year, 0, 1);
-const dayOfYear = Math.ceil((now.getTime() - startOfYear.getTime()) / 86400000);
-const weekNum = Math.ceil(dayOfYear / 7);
-const weekStr = `${year}-W${String(weekNum).padStart(2, '0')}`;
 ---
 
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <p class="footer-name">IA Field Notes</p>
       <p class="footer-tagline">Intelligence, amplified</p>
       <p class="footer-disclaimer">Not an official Microsoft resource. Views represent personal perspective from work in the field. Nothing here is sponsored, endorsed, or reviewed by any vendor.</p>
       <div class="footer-links">
@@ -19,9 +12,6 @@ const weekStr = `${year}-W${String(weekNum).padStart(2, '0')}`;
         <a href="mailto:hello@intelligenceamplified.work">Contact</a>
       </div>
     </div>
-  </div>
-  <div class="footer-bottom">
-    LAST UPDATED · {weekStr}
   </div>
 </footer>
 
@@ -44,15 +34,6 @@ const weekStr = `${year}-W${String(weekNum).padStart(2, '0')}`;
   .footer-brand {
     max-width: 520px;
     text-align: center;
-  }
-
-  .footer-name {
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
   }
 
   .footer-tagline {
@@ -85,17 +66,6 @@ const weekStr = `${year}-W${String(weekNum).padStart(2, '0')}`;
 
   .footer-links a:hover {
     color: var(--accent);
-  }
-
-  .footer-bottom {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
-    text-align: center;
-    font-family: 'Commit Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--text-meta);
-    letter-spacing: 0.02em;
   }
 
   @media (max-width: 768px) {

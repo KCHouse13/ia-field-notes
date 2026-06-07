@@ -18,13 +18,9 @@ try {
 ---
 
 <BaseLayout title={`${SECTION_TITLE} — IA Field Notes`} description={SECTION_DESC}>
-  <section style="max-width: 1280px; margin: 0 auto; padding: 6rem 2rem 2rem;">
-    <h1 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 600; line-height: 1.2; color: var(--text-primary);">
-      {SECTION_TITLE}
-    </h1>
-    <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 0.75rem; max-width: 600px;">
-      {SECTION_DESC}
-    </p>
+  <section class="section-hero">
+    <h1>{SECTION_TITLE}</h1>
+    <p>{SECTION_DESC}</p>
   </section>
 
   <SectionDivider label={`All ${SECTION_TITLE}`} />
@@ -40,7 +36,7 @@ try {
             topic={entry.data.topic}
             description={entry.data.excerpt}
             collection={COLLECTION_NAME}
-            readTime={entry.data.readTime}
+            readTime=""
           />
         ))}
       </div>

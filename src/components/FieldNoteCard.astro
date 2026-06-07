@@ -23,7 +23,7 @@ const formattedDate = d.toLocaleDateString('en-US', { month: 'short', day: 'nume
 
   <footer class="card-footer">
     <time datetime={d.toISOString()}>{formattedDate}</time>
-    <span>{readTime}</span>
+    {readTime && <span>{readTime}</span>}
   </footer>
 </a>
 

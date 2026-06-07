@@ -157,7 +157,7 @@ export const NEWS: NewsItem[] = [
     tags: ['new design', 'Work IQ', 'Scout'],
   },
   {
-    cat: 'app', iso: '2026-06-02', source: 'blog',
+    cat: 'agents', iso: '2026-06-02', source: 'blog',
     url: 'https://www.microsoft.com/en-us/microsoft-365/blog/2026/06/02/introducing-microsoft-scout-your-always-on-personal-agent/',
     title: 'Microsoft Scout: an always-on personal agent',
     desc: 'A personal agent woven across the Microsoft 365 apps you use every day, staying grounded in your flow of work.',
