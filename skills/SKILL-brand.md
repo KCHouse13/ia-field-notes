@@ -1,13 +1,21 @@
+---
+name: brand-voice-identity
+title: Brand Voice & Identity
+description: Canonical brand rules — voice, tone, banned words, formatting, metadata vocabulary — for all IA Field Notes content. The single source of truth every other skill references.
+applies_to: all content (field-notes, use-cases, guides, prompt-library, news)
+source_of_truth: true
+---
+
 # SKILL: Brand Voice & Identity
 
 ## Purpose
-Master brand rules for all IA Field Notes content. Every other SKILL references this file. Any content generated for the site must comply with these rules.
+Master brand rules for all IA Field Notes content. **This file is the single source of truth (SSOT) for brand voice, the banned-words list, formatting, and content-metadata vocabulary.** Every other skill — and the Squad `brand-voice` team skill and agent charters — references this file rather than restating its rules. If a rule here conflicts with a copy elsewhere, this file wins; update the copy to match.
 
 ## Input
 N/A — this is a reference document, not a generation skill.
 
 ## Output
-N/A — used as a compliance check by all other SKILLs and by SKILL-editor.md.
+N/A — used as a compliance check by all other skills and by SKILL-editor.md.
 
 ## Brand Identity
 
@@ -25,6 +33,8 @@ N/A — used as a compliance check by all other SKILLs and by SKILL-editor.md.
 - **Warmth:** Supportive, never condescending
 
 ## Banned Words
+
+This list is **canonical**. The Squad `brand-voice` team skill, the agent charters, and `docs/CONTRIBUTING.md` mirror it — keep them in sync with this file, not the other way around.
 
 Never use these words/phrases in any content:
 - revolutionary
@@ -70,6 +80,17 @@ Never use these words/phrases in any content:
 - Numbers: spell out one through nine, use numerals for 10+
 - Dates: YYYY-MM-DD in frontmatter, "May 22, 2026" in body text
 - Em dashes: use sparingly — and with spaces on both sides
+- **`readTime` frontmatter:** write it as `"N min read"` (e.g., `"6 min read"`). Estimate as words ÷ 200, rounded up. This matches the `FieldNoteCard` default. Note: the Guides index intentionally passes an empty `readTime` so guide cards omit it (the value still shows on the guide page itself).
+
+## Content metadata vocabulary
+
+Frontmatter taxonomy fields are free strings (not enums in the schema), so keep values consistent with this shared, **non-exhaustive** vocabulary. Reuse an existing value before coining a new one.
+
+- **`topic`** (field-notes, guides): Copilot, Agents, Adoption, Governance, Prompting, Productivity, Microsoft 365, Security.
+- **`role`** (use-cases): IT Administrator, Developer, Marketing Manager, Analyst, Knowledge Worker, Executive.
+- **`industry`** (use-cases): Healthcare, Financial Services, Education, Manufacturing, Retail, Public Sector.
+- **`category`** (prompt-library): Summarization, Analysis, Writing, Code, Planning, Research.
+- **`difficulty`** (guides) is a real enum — use exactly `beginner`, `intermediate`, or `advanced`.
 
 ## Anti-patterns
 

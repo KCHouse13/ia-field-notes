@@ -1,3 +1,11 @@
+---
+name: editor
+title: Editor
+description: Editorial quality gate. Reviews any content draft (field-note, use-case, guide, prompt-library, or news data entry) against brand, structure, and technical rules before commit. Use to review, never to rewrite.
+applies_to: all content types
+brand_source_of_truth: skills/SKILL-brand.md
+---
+
 # SKILL: Editor
 
 ## Purpose
@@ -17,9 +25,11 @@ This SKILL enforces `skills/SKILL-brand.md` rules.
 ## Review Checklist
 
 ### 1. Structure Compliance
-- [ ] Frontmatter matches the schema for this content type
+- [ ] Frontmatter matches the schema for this content type (`src/content.config.ts`)
 - [ ] All required body sections are present and in correct order
-- [ ] Word count is within range for the content type
+- [ ] Word count is within range (Field Note 300–600; Use Case 600–1200; Guide and Prompt Library variable)
+- [ ] `readTime` is formatted `"N min read"` (see SKILL-brand.md)
+- [ ] Guides only: `difficulty` is `beginner`/`intermediate`/`advanced`, and `width` is `standard` or `wide`
 
 ### 2. Brand Voice
 - [ ] No banned words (see SKILL-brand.md)
@@ -44,9 +54,17 @@ This SKILL enforces `skills/SKILL-brand.md` rules.
 - [ ] Dates formatted correctly
 
 ### 6. MDX Components (for .mdx files only)
-- [ ] Components are imported correctly
-- [ ] Props match component interface
+- [ ] Components are imported correctly with the right relative path
+- [ ] Props match the component interface (see `docs/COMPONENTS.md`)
 - [ ] Components render meaningful content (not empty)
+- [ ] Wide/interactive guides (`width: wide`): the bespoke component lives in `src/components/guides/`, uses namespaced CSS, and any images under `public/images/guides/<slug>/` exist
+- [ ] Images include descriptive alt text (accessibility)
+
+### 7. News data entries (`src/data/news.ts` only)
+- [ ] Every `url` is a real, official Microsoft page (no invented URLs)
+- [ ] `cat` is one of the 8 category keys; `source` is `blog`/`tc`/`hub`
+- [ ] `desc` is one neutral sentence; `FEATURED` stays at 3
+- [ ] `npm run build` passes (the data file is type-checked)
 
 ## Response Format
 

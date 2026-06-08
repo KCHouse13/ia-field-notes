@@ -11,8 +11,9 @@
 
 ## What I Own
 
-- Guide content (`src/content/guides/`)
-- Prompt library entries (`src/content/prompt-library/`)
+- Guide content (`src/content/guides/`), both standard and wide/interactive formats
+- The content and structure of wide/interactive guides (the bespoke component is built with Mercer, who owns `src/components/guides/`)
+- Prompt library entries (`src/content/prompt-library/`) — note: not in main nav (see decisions.md)
 - MDX component usage patterns (WalkthroughStep, CalloutBox, PromptExample, CodeBlock)
 
 ## How I Work
@@ -23,6 +24,8 @@
 - `<PromptExample>` for any prompt text with copy-to-clipboard
 - `<CodeBlock>` for code snippets with syntax highlighting
 - Difficulty level (beginner/intermediate/advanced) is always set in frontmatter
+- `width` frontmatter selects the layout: `standard` (default, `PostLayout`) or `wide` (`GuideWideLayout`, full-bleed). The route `src/pages/guides/[...slug].astro` switches automatically.
+- Wide/interactive guides are a thin MDX shell around one bespoke component in `src/components/guides/` (e.g. `CopilotChatBasicGuide.astro`). I own the content and flow; Mercer owns the component code. See SKILL-guide-builder.md.
 - Prompt library entries follow SKILL-prompt-library.md structure
 - Prompts include: Use case, the Prompt itself, Expected output, Variations
 

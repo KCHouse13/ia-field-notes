@@ -49,6 +49,33 @@ export async function getStaticPaths() {
 }
 ```
 
+### Collections in this project
+- Four collections: `field-notes`, `use-cases`, `guides`, `prompt-library`.
+- **News is NOT a collection** — it lives in `src/data/news.ts` as a typed data module (link-out roll-up, no article bodies). Don't add a `news` collection to `content.config.ts`.
+
+### Guides `width` enum and layout selection
+The `guides` schema carries a `width` enum that drives which layout renders the post:
+```typescript
+const guides = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/guides' }),
+  schema: z.object({
+    title: z.string(),
+    // ...
+    difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
+    width: z.enum(['standard', 'wide']).default('standard'),
+  }),
+});
+```
+```astro
+---
+// src/pages/guides/[...slug].astro
+import PostLayout from '../../layouts/PostLayout.astro';
+import GuideWideLayout from '../../layouts/GuideWideLayout.astro';
+const Layout = post.data.width === 'wide' ? GuideWideLayout : PostLayout;
+---
+```
+Wide guides wrap a single bespoke component from `src/components/guides/` (e.g. `CopilotChatBasicGuide.astro`).
+
 ## Anti-Patterns
 - Don't use the legacy `type: 'content'` pattern — Astro v6 uses `glob()` loader
 - Don't hardcode content paths — use `getCollection()` API

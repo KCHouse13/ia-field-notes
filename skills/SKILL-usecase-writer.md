@@ -1,3 +1,11 @@
+---
+name: use-case-writer
+title: Use Case Writer
+description: Generate scenario-based Use Case posts (600–1200 words) as Markdown. Use when showing how AI/Copilot/agents solved a real business problem for a role and industry.
+applies_to: src/content/use-cases/*.md
+brand_source_of_truth: skills/SKILL-brand.md
+---
+
 # SKILL: Use Case Writer
 
 ## Purpose
@@ -30,9 +38,9 @@ All content must comply with `skills/SKILL-brand.md`. Reference it before writin
 ---
 title: "descriptive-scenario-title"
 date: YYYY-MM-DD
-role: "string (e.g., IT Administrator, Marketing Manager, Developer)"
-industry: "string (e.g., Healthcare, Financial Services, Education)"
-readTime: "X min"
+role: "see the role vocabulary in SKILL-brand.md (e.g., IT Administrator, Developer)"
+industry: "see the industry vocabulary in SKILL-brand.md (e.g., Healthcare, Education)"
+readTime: "X min read"
 excerpt: "One sentence summary"
 draft: false
 tags: ["tag1", "tag2"]

@@ -4,6 +4,38 @@
 
 ---
 
+## 0. As-Built Deltas (2026-06)
+
+> This plan is the original v1 build spec. The sections below it are kept for
+> historical context, but the site has evolved. **Where this section conflicts with
+> anything later in the plan, this section is correct.**
+
+- **Dark mode shipped in v1** (not deferred). The site is dark-mode-first with a
+  light/dark toggle. (§1.5 still lists it as out-of-scope — ignore that.)
+- **Content config path:** schemas live at `src/content.config.ts` (Astro v6 glob
+  loaders), not `src/content/config.ts` (§4).
+- **News is a typed data module**, not a content collection. It lives at
+  `src/data/news.ts` (link-out roll-up, no article bodies). The `src/content/news/`
+  collection and the `/news/[...slug]` route were removed; only `/news/index.astro`
+  remains. So there are **4 content collections** (field-notes, use-cases, guides,
+  prompt-library) plus the News data module.
+- **Guides have two formats** via a `width` enum (`standard` | `wide`). Wide guides
+  render through `GuideWideLayout` and wrap one bespoke component in
+  `src/components/guides/` (first: `CopilotChatBasicGuide.astro`).
+- **Layouts:** three — `BaseLayout`, `PostLayout`, `GuideWideLayout` (§4 listed only
+  the first two).
+- **Components added since the plan:** `CategoryTile.astro` (section/category nav) and
+  the `src/components/guides/` bespoke guide components.
+- **UI polish:** section index pages and About use a reusable `.section-hero` radial
+  glow driven by tokens in `global.css`; the footer was simplified; `FieldNoteCard`
+  omits the read-time line when it's empty.
+- **Brand SSOT:** `skills/SKILL-brand.md` is canonical for voice, the 12 banned words,
+  the `readTime` format (`"N min read"`), and content metadata vocabulary.
+- **Team:** a 6-agent Squad (Harper, Mercer, Finch, Sawyer, Quinn, Reeve) governs the
+  workflow; ownership by file pattern is canonical in `.squad/routing.md`.
+
+---
+
 ## 1. Project Overview
 
 ### 1.1 Brand

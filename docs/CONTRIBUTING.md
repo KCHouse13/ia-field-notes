@@ -35,7 +35,7 @@ src/content/
 title: "Your observation title"
 date: 2026-05-22
 topic: "Copilot"
-readTime: "3 min"
+readTime: "3 min read"
 excerpt: "One-line summary of the observation"
 draft: false
 tags: ["copilot", "adoption"]
@@ -49,17 +49,66 @@ title: "Your use case title"
 date: 2026-05-22
 role: "IT Administrator"
 industry: "Healthcare"
-readTime: "5 min"
+readTime: "5 min read"
 excerpt: "One-line summary"
 draft: false
 tags: ["copilot", "healthcare"]
 ---
 ```
 
+### Guide
+```yaml
+---
+title: "Your guide title"
+date: 2026-05-22
+topic: "Microsoft 365 Copilot"
+difficulty: "beginner"      # beginner | intermediate | advanced
+readTime: "10 min read"
+excerpt: "One-line summary"
+width: "standard"           # standard (PostLayout) | wide (GuideWideLayout)
+draft: false
+tags: ["copilot", "getting-started"]
+---
+```
+
+> Set `width: wide` only for interactive guides that render a bespoke component from
+> `src/components/guides/`. See `skills/SKILL-guide-builder.md`.
+
+### Prompt Library
+```yaml
+---
+title: "Your prompt title"
+date: 2026-05-22
+category: "Productivity"
+model: "Microsoft 365 Copilot"
+excerpt: "One-line summary"
+draft: false
+tags: ["copilot", "email"]
+---
+```
+
+### News (data entry, not a content file)
+News is not a content collection. Append a typed `NewsItem` to the `NEWS` array in `src/data/news.ts`:
+```typescript
+{
+  cat: 'app',               // CategoryKey: app | word | excel | powerpoint | outlook | teams | knowledge | agents
+  iso: '2026-05-22',        // YYYY-MM-DD — drives sorting + the displayed month
+  source: 'm365blog',       // SourceKey: m365blog | m365copilot | agent365 | excelblog | spblog | hub
+  url: 'https://www.microsoft.com/...',
+  title: 'Plain-language headline',
+  desc: 'One tight sentence on what changed and why it matters.',
+  tags: ['copilot', 'chat'],
+}
+```
+
+> Fields must match the `NewsItem` type in `src/data/news.ts`. Monthly "What's new"
+> roll-ups go in the `MONTHLY` array; flagship launches go in `FEATURED` (keep 3).
+> See `skills/SKILL-news-curator.md` for the full workflow and `NEWS_META` rules.
+
 ## Brand Rules
 
 - **Voice:** Practitioner to practitioner — direct, credible, no hype
-- **Banned words:** revolutionary, unleash, game-changing, transformative (filler), cutting-edge, synergy, leverage (verb), unlock (overused)
+- **Banned words:** the canonical 12 in `skills/SKILL-brand.md` — revolutionary, unleash, game-changing, transformative (filler), cutting-edge, synergy, leverage (verb), unlock (overused), disrupt/disruptive, paradigm shift, best-in-class, next-generation
 - **Citations:** All external claims must include linked sources
 - **Disclaimers:** Any vendor reference needs a note that views are not official
 

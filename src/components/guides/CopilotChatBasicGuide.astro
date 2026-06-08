@@ -502,7 +502,7 @@ const IMG = '/images/guides/copilot-chat-basic';
       </div>
 
       <!-- Part 2: Watch a Prompt Evolve -->
-      <h3 class="fade-in" style="font-family:var(--font-heading);font-size:1.5rem;font-weight:700;margin:2.5rem 0 0.5rem;">Watch a prompt evolve</h3>
+      <h3 class="cgb-group-heading fade-in">Watch a prompt evolve</h3>
       <p class="fade-in" style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:1.25rem;">The same task — three levels of detail. Notice how each version layers in more GCSE elements.</p>
 
       <div class="evolve-stepper fade-in">
@@ -562,7 +562,7 @@ const IMG = '/images/guides/copilot-chat-basic';
       </div>
 
       <!-- Part 3: Power Techniques -->
-      <h3 class="fade-in" style="font-family:var(--font-heading);font-size:1.5rem;font-weight:700;margin:2.5rem 0 0.5rem;">Power techniques</h3>
+      <h3 class="cgb-group-heading fade-in">Power techniques</h3>
       <p class="fade-in" style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:1.25rem;">Six strategies that turn good prompts into great ones. Click any card to expand.</p>
 
       <div class="capabilities-grid prompting-techniques fade-in">
@@ -680,7 +680,7 @@ const IMG = '/images/guides/copilot-chat-basic';
       </div>
 
       <!-- Part 4: Try It Yourself -->
-      <h3 class="fade-in" style="font-family:var(--font-heading);font-size:1.5rem;font-weight:700;margin:2.5rem 0 0.5rem;">Try it yourself</h3>
+      <h3 class="cgb-group-heading fade-in">Try it yourself</h3>
       <p class="fade-in" style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:1.25rem;">Read each scenario, write your own prompt, then click to see our suggestion.</p>
 
       <div class="practice-grid fade-in">
@@ -1011,11 +1011,6 @@ const IMG = '/images/guides/copilot-chat-basic';
       <a href="https://m365copilot.com" target="_blank" rel="noopener" class="cgb-btn-primary" style="font-size: 1rem; padding: 0.85rem 2rem;">Open Copilot Chat →</a>
     </div>
   </section>
-
-  <!-- ── Disclaimer ── -->
-  <div class="cgb-disclaimer fade-in">
-    <p>Built using Microsoft's published documentation and training resources. Not an official Microsoft product. Screenshots are illustrative and may differ from the current product experience.</p>
-  </div>
 
   <button class="cgb-back-to-top" id="cgb-back-to-top" aria-label="Back to top" data-pagefind-ignore>↑</button>
   <div class="cgb-toast" id="cgb-toast" data-pagefind-ignore>Copied!</div>
@@ -1396,11 +1391,28 @@ const IMG = '/images/guides/copilot-chat-basic';
 
   /* ── Capability cards ── */
   .capability-category { margin-bottom: 1.5rem; }
-  .capability-category h3 {
-    font-size: 1.35rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
+  .capability-category h3,
+  .cgb-group-heading {
+    position: relative;
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 600;
+    line-height: 1.2;
     color: var(--text-primary);
+    margin: 2.5rem 0 1.25rem;
+    padding: 0 0 0.55rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .capability-category h3::before,
+  .cgb-group-heading::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.12em;
+    bottom: 0.55rem;
+    width: 4px;
+    border-radius: 2px;
+    background: var(--accent);
   }
   .capabilities-grid {
     display: grid;
@@ -1802,10 +1814,6 @@ const IMG = '/images/guides/copilot-chat-basic';
   .resource-card h4 { font-family: var(--font-body); font-weight: 600; font-size: 0.95rem; margin-bottom: 0.35rem; }
   .resource-card p { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
   .resource-card .ext-icon { position: absolute; top: 1rem; right: 1rem; color: var(--text-secondary); font-size: 0.85rem; }
-
-  /* ── Disclaimer ── */
-  .cgb-disclaimer { max-width: 640px; margin: 0 auto; padding: 0 2rem 1rem; text-align: center; }
-  .cgb-disclaimer p { font-size: 0.78rem; color: var(--text-meta); line-height: 1.6; }
 
   /* ── Toast ── */
   .cgb-toast {

@@ -1,26 +1,26 @@
 ---
-updated_at: 2026-05-22T05:17:00.000Z
-focus_area: "v1 site scaffold and Squad team build-out"
+updated_at: 2026-06-07T00:00:00.000Z
+focus_area: "Post-v1 content build-out and agent/skill/docs alignment"
 active_issues: []
 ---
 
 # What We're Focused On
 
-Building the v1 scaffold of IA Field Notes — an Astro-based editorial site for practical AI content. Current phase: project initialization, component library, content schemas, and Squad team configuration.
+The v1 scaffold is shipped and live at https://intelligenceamplified.work (Astro static site on GitHub Pages, dark-mode-first "Practitioner's Intelligence Briefing" design). Current phase: aligning the Squad agents, SKILL files, and docs with what's actually been built, and growing real content.
 
 ## Active Work Streams
 
-- **Project scaffold:** Astro + Tailwind + TypeScript + Pagefind initialization
-- **Component library:** 12 Astro components (layouts, UI, search)
-- **Content architecture:** 5 content collection schemas with Zod validation
-- **Squad team:** 6 specialist agents configured with charters, routing, and skills
-- **SKILL files:** 7 content generation instruction files
-- **CI/CD:** GitHub Actions deploy workflow for GitHub Pages
+- **Agent/skill/docs alignment:** Reconciling charters, routing, team skills, and SKILL files with the as-built code (`skills/SKILL-brand.md` is the canonical brand SSOT).
+- **Component library:** 13 Astro components (UI, search, layouts helpers) including `CategoryTile` and bespoke guide components under `src/components/guides/`.
+- **Content architecture:** 4 content collections (field-notes, use-cases, guides, prompt-library) + the News typed data module (`src/data/news.ts`).
+- **Guides:** standard (`PostLayout`) and wide/interactive (`GuideWideLayout`) formats, selected by the `width` frontmatter enum.
+- **UI polish:** section-hero/about-hero radial glow, simplified footer, card refinements.
+- **Content:** growing the first real guides, field notes, use cases, and curated news.
 
 ## What's Next
 
-1. Complete component library (Mercer)
-2. Build all pages — homepage, about, section indexes, dynamic routes (Finch)
-3. Create first batch of content using SKILL files (Sawyer, Quinn)
-4. Validate build and deployment pipeline (Reeve)
-5. Content review and brand compliance check (Harper)
+1. Keep agents/skills/docs in sync as the site evolves (Harper)
+2. Expand the component set and design tokens as new content needs arise (Mercer)
+3. Produce more guides and field notes from the SKILL files (Quinn, Sawyer)
+4. Maintain the News roll-up and `NEWS_META` accuracy (Sawyer)
+5. Review all content for brand compliance before merge (Harper)

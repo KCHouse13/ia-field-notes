@@ -1,3 +1,11 @@
+---
+name: guide-builder
+title: Guide Builder
+description: Generate step-by-step Guides (MDX) for the Guides section. Supports two formats — standard guides built from shared walkthrough components, and wide/interactive guides driven by a bespoke component. Use when writing a how-to.
+applies_to: src/content/guides/*.mdx
+brand_source_of_truth: skills/SKILL-brand.md
+---
+
 # SKILL: Guide Builder
 
 ## Purpose
@@ -17,6 +25,44 @@ Generate step-by-step interactive walkthroughs using MDX components. Guides teac
 ## Brand Compliance
 All content must comply with `skills/SKILL-brand.md`. Reference it before writing.
 
+## Guide formats: standard vs wide/interactive
+Guides come in two formats, selected by the `width` frontmatter field (schema in `src/content.config.ts`). The route `src/pages/guides/[...slug].astro` picks the layout automatically.
+
+| `width` | Layout used | When to use |
+|---|---|---|
+| `standard` (default) | `PostLayout` | Most guides — prose plus the shared MDX components below. |
+| `wide` | `GuideWideLayout` (full-bleed) | Rich, app-like guides that need the full viewport (custom sections, lightbox imagery, sticky sub-nav, scroll progress). |
+
+**Standard guides** are authored entirely in MDX using the shared components (`WalkthroughStep`, `CalloutBox`, `PromptExample`, `CodeBlock`). Start here unless the design genuinely needs more.
+
+**Wide/interactive guides** wrap a single **bespoke component** that lives in `src/components/guides/<Name>.astro`. The MDX file is a thin shell — frontmatter (`width: wide`) plus an import and one tag. The live example is [`src/content/guides/copilot-chat-basic.mdx`](../src/content/guides/copilot-chat-basic.mdx), which renders [`src/components/guides/CopilotChatBasicGuide.astro`](../src/components/guides/CopilotChatBasicGuide.astro):
+
+```mdx
+---
+title: "Copilot Chat (Basic): Overview & Getting Started"
+date: 2026-06-07
+topic: "Microsoft 365 Copilot"
+difficulty: "beginner"
+readTime: "18 min read"
+excerpt: "One sentence summary"
+tags: ["Microsoft 365", "Copilot Chat", "Getting started"]
+draft: false
+width: wide
+---
+
+import CopilotChatBasicGuide from '../../components/guides/CopilotChatBasicGuide.astro';
+
+<CopilotChatBasicGuide />
+```
+
+Conventions for a bespoke guide component:
+- **Scope the CSS.** Prefix every class with a short guide-specific token (e.g. `cgb-` for the Copilot Chat Basic guide) so styles can't leak.
+- **Images** go under `public/images/guides/<slug>/` and are referenced with absolute `/images/guides/<slug>/…` paths. Every image needs descriptive alt text.
+- **Keep behavior self-contained** (lightbox, sub-nav, scroll progress) inside the component; don't add global scripts.
+- **Ownership is a collaboration:** Quinn owns the guide content and structure; Mercer owns the component code and layout wiring (`src/components/guides/**`). See `.squad/routing.md`.
+
+Use a wide guide only when a standard guide can't do the job — it's more code to maintain.
+
 ## Voice & Tone Rules
 - Second-person ("You'll need to..." / "Open the...")
 - Patient and thorough — assume the reader is smart but new to this specific workflow
@@ -31,10 +77,11 @@ title: "how-to-do-specific-thing"
 date: YYYY-MM-DD
 topic: "string"
 difficulty: "beginner" | "intermediate" | "advanced"
-readTime: "X min"
+readTime: "X min read"
 excerpt: "One sentence summary"
 draft: false
 tags: ["tag1", "tag2"]
+width: "standard"   # or "wide" for a bespoke interactive guide (see above)
 ---
 ```
 

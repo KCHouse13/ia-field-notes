@@ -1,3 +1,11 @@
+---
+name: field-note-writer
+title: Field Note Writer
+description: Generate short-form Field Notes observation posts (300–600 words) as Markdown. Use when writing a dispatch-style observation for the Field Notes section.
+applies_to: src/content/field-notes/*.md
+brand_source_of_truth: skills/SKILL-brand.md
+---
+
 # SKILL: Field Note Writer
 
 ## Purpose
@@ -29,8 +37,8 @@ All content must comply with `skills/SKILL-brand.md`. Reference it before writin
 ---
 title: "descriptive-but-concise-title"
 date: YYYY-MM-DD
-topic: "string (e.g., Copilot, Agents, Adoption, Governance)"
-readTime: "X min"
+topic: "see the topic vocabulary in SKILL-brand.md (e.g., Copilot, Agents, Adoption)"
+readTime: "X min read"
 excerpt: "One sentence summary — this appears in card views"
 draft: false
 tags: ["tag1", "tag2"]

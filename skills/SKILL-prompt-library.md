@@ -1,3 +1,11 @@
+---
+name: prompt-library
+title: Prompt Library
+description: Generate reusable Prompt Library entries (MDX) with context, expected output, and variations using the PromptExample component. Use when adding a prompt entry.
+applies_to: src/content/prompt-library/*.mdx
+brand_source_of_truth: skills/SKILL-brand.md
+---
+
 # SKILL: Prompt Library
 
 ## Purpose
@@ -14,6 +22,8 @@ Generate reusable prompt entries with context, expected output, and variations. 
 - **File:** `src/content/prompt-library/[slug].mdx`
 - **Format:** MDX with YAML frontmatter and PromptExample component
 - **Length:** Variable
+
+> **Navigation note:** Prompt Library has its own section pages (`/prompt-library/`) but is intentionally **not listed in the main header nav** (`src/components/Header.astro`). Entries are reachable by direct link and search. Don't add a nav link unless that decision changes.
 
 ## Brand Compliance
 All content must comply with `skills/SKILL-brand.md`. Reference it before writing.

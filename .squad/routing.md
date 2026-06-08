@@ -14,6 +14,7 @@ How to decide who handles what on the IA Field Notes project.
 | Use case content | Sawyer | Write use case, document scenario, describe outcome |
 | News content | Sawyer | Summarize announcement, curate update, write news post |
 | Guide content | Quinn | Write walkthrough, build step-by-step guide, create tutorial |
+| Wide/interactive guide component | Mercer + Quinn | Build the bespoke `src/components/guides/*` component (Mercer) for guide content (Quinn) |
 | Prompt library content | Quinn | Create prompt entry, document prompt pattern, add variations |
 | CI/CD & deployment | Reeve | Fix deploy workflow, update GitHub Actions, build errors |
 | Search & Pagefind | Reeve | Configure Pagefind, fix search indexing, SearchBar issues |
@@ -49,12 +50,12 @@ How to decide who handles what on the IA Field Notes project.
 
 | Pattern | Owner | Reason |
 |---------|-------|--------|
-| `src/layouts/**` | Mercer | Layout components |
+| `src/layouts/**` | Mercer | Layout components (incl. `GuideWideLayout`) |
 | `src/components/**` | Mercer | UI components |
+| `src/components/guides/**` | Mercer (with Quinn) | Bespoke wide/interactive guide components — component code Mercer, content Quinn |
 | `src/styles/**` | Mercer | CSS and Tailwind |
 | `tailwind.config.*` | Mercer | Tailwind configuration |
-| `src/content/config.ts` | Finch | Content schemas |
-| `src/content.config.ts` | Finch | Content schemas (v6) |
+| `src/content.config.ts` | Finch | Content schemas (Astro v6 location) |
 | `src/pages/**` | Finch | Page routing |
 | `src/content/field-notes/**` | Sawyer | Field note content |
 | `src/content/use-cases/**` | Sawyer | Use case content |

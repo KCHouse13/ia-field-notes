@@ -1,3 +1,11 @@
+---
+name: news-curator
+title: News Curator
+description: Maintain the News roll-up by editing the typed data module src/data/news.ts — add and verify official Microsoft Copilot announcements, monthly roll-ups, and featured launches. Use when updating the News section.
+applies_to: src/data/news.ts
+brand_source_of_truth: skills/SKILL-brand.md
+---
+
 # SKILL: News Curator
 
 ## Purpose
@@ -31,7 +39,7 @@ To update the News section, **edit `src/data/news.ts`** and nothing else.
 {
   cat: CategoryKey,   // one of the 8 category keys below
   iso: string,        // 'YYYY-MM-DD' publish date — drives sort + displayed month
-  source: SourceKey,  // 'blog' | 'tc' | 'hub'
+  source: SourceKey,  // one of: 'm365blog' | 'm365copilot' | 'agent365' | 'excelblog' | 'spblog' | 'hub'
   url: string,        // official Microsoft URL
   title: string,      // plain-language headline
   desc: string,       // ONE tight sentence: what changed + why it matters
@@ -54,7 +62,9 @@ The month label ("Jun", "Jul", …) and year are derived from `iso` — don't st
 ```ts
 { monthsCovered: number, officialPct: number }
 ```
-Shown in the hero. Bump `monthsCovered` only when the coverage window actually grows.
+Shown in the hero.
+- **`monthsCovered`** = the number of distinct calendar months (`YYYY-MM`) the roll-up spans — in practice the count of `MONTHLY` entries. Bump it by one only when you add a `MONTHLY` entry for a new month. (Current value: 13.)
+- **`officialPct`** = the share of entries linking to an official Microsoft source, as a whole number. By policy every entry must link to an official source, so this stays **100**. Only recompute it if that policy ever changes.
 
 ## Category taxonomy (8 solutions)
 Use exactly these keys for `cat`:
@@ -78,8 +88,11 @@ Use exactly these keys for `source`:
 
 | key | name | when |
 |-----|------|------|
-| `blog` | Microsoft 365 Blog | microsoft.com/microsoft-365/blog posts |
-| `tc` | Microsoft 365 Copilot Blog · Tech Community | techcommunity.microsoft.com Copilot blog |
+| `m365blog` | Microsoft 365 Blog | microsoft.com/microsoft-365/blog posts |
+| `m365copilot` | Microsoft 365 Copilot Blog | Tech Community Copilot board posts and monthly roll-ups |
+| `agent365` | Agent 365 Blog | Agent 365 registry, governance, identity, SDK, and admin control-plane updates |
+| `excelblog` | Excel Blog | Excel product-team Copilot, Agent Mode, App Skills, connector, and attribution posts |
+| `spblog` | SharePoint Blog | SharePoint AI, SharePoint agents, Knowledge Agent, and content-governance posts |
 | `hub` | Microsoft 365 Copilot product news | the product news hub (use only when no dedicated post URL exists yet) |
 
 ## Sources to monitor
@@ -89,9 +102,17 @@ Check these regularly for anything published **after the newest `iso` already in
    `https://www.microsoft.com/en-us/microsoft-365/blog/product/microsoft-365-copilot/`
 2. **Microsoft 365 Copilot Blog (Tech Community)**
    `https://techcommunity.microsoft.com/category/microsoft365copilot/blog/microsoft365copilotblog`
-3. **Monthly "What's new in Microsoft 365 Copilot" roll-ups** (Tech Community) — the
+3. **Agent 365 Blog (Tech Community)**
+   `https://techcommunity.microsoft.com/category/microsoft365/blog/agent-365-blog`
+4. **Excel Blog (Tech Community)** — only add posts directly about Copilot in Excel,
+   Agent Mode, App Skills, federated connectors, attribution, or AI-assisted workbook work.
+   `https://techcommunity.microsoft.com/category/microsoft365/blog/excelblog`
+5. **SharePoint Blog (Tech Community)** — only add posts directly about SharePoint AI,
+   SharePoint agents, Knowledge Agent, content grounding, or agentic building.
+   `https://techcommunity.microsoft.com/category/content_management/blog/spblog`
+6. **Monthly "What's new in Microsoft 365 Copilot" roll-ups** (Tech Community) — the
    app-by-app system of record. Each new month gets a `MONTHLY` entry.
-4. **Microsoft 365 Copilot product news hub** — for very new launches that don't yet
+7. **Microsoft 365 Copilot product news hub** — for very new launches that don't yet
    have a dedicated post (use `source: 'hub'`).
 
 When you fetch a source, prefer the official permalink for the specific announcement.
@@ -110,7 +131,7 @@ Only fall back to the `hub` source when a dedicated URL doesn't exist yet.
 6. **Append to `NEWS`** (order doesn't matter; the page sorts by `iso`). Example:
    ```ts
    {
-     cat: 'excel', iso: '2026-06-30', source: 'tc',
+     cat: 'excel', iso: '2026-06-29', source: 'excelblog',
      url: 'https://techcommunity.microsoft.com/.../4530000',
      title: 'Scenario analysis in the Excel grid',
      desc: 'Copilot drafts and compares what-if scenarios directly in the workbook so you can decide faster.',
@@ -123,7 +144,9 @@ Only fall back to the `hub` source when a dedicated URL doesn't exist yet.
    stays at 3. Featured items are the moments that define the product direction
    (major GAs, redesigns, platform shifts).
 9. **Dedupe.** If a monthly roll-up and a dedicated post cover the same feature,
-   prefer the dedicated post and don't list the same feature twice.
+   prefer the dedicated post and don't list the same feature twice. Broad launch
+   posts and product-team deep dives can both stay only when they serve distinct
+   reader jobs, such as launch context vs. implementation detail.
 10. **Update `NEWS_META.monthsCovered`** only if the span of covered months grew.
 
 ## Brand compliance

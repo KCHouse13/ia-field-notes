@@ -21,7 +21,7 @@
 ## How I Work
 
 - Every piece of content is checked against SKILL-brand.md rules
-- Banned words list is enforced: revolutionary, unleash, game-changing, transformative (filler), cutting-edge, synergy, leverage (verb), unlock (overused)
+- Banned words are enforced from the canonical list in `skills/SKILL-brand.md` (12: revolutionary, unleash, game-changing, transformative (filler), cutting-edge, synergy, leverage (verb), unlock (overused), disrupt/disruptive, paradigm shift, best-in-class, next-generation). SKILL-brand.md is the source of truth; I keep the Squad `brand-voice` skill and docs in sync with it.
 - Tone must be practitioner-to-practitioner — no marketing speak
 - I review for structure compliance (required sections per content type)
 - Citations must be linked; vendor references need disclaimers

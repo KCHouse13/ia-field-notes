@@ -1,5 +1,5 @@
 ---
-last_updated: 2026-05-22T05:17:00.000Z
+last_updated: 2026-06-07T00:00:00.000Z
 ---
 
 # Team Wisdom
@@ -34,3 +34,21 @@ Reusable patterns and heuristics learned through work. NOT transcripts — each 
 
 **Pattern:** Cards use --shadow-card in light mode, border-glow on hover in dark mode (no shadows).
 **Context:** Shadow tokens evaluate to `none` in dark mode. Dark mode cards rely on border-color change + bg-raised for depth.
+
+**Pattern:** Guides have two formats selected by the `width` enum: `standard` → `PostLayout`, `wide` → `GuideWideLayout` (full-bleed). The route `src/pages/guides/[...slug].astro` picks the layout.
+**Context:** Wide/interactive guides wrap a single bespoke component in `src/components/guides/` (e.g. `CopilotChatBasicGuide.astro`) with namespaced CSS. Quinn owns content, Mercer owns the component.
+
+**Pattern:** News is a typed data module (`src/data/news.ts`), not a content collection. The News page derives `NEWS_META` (monthsCovered, officialPct) from the entries.
+**Context:** News links out to official sources instead of hosting article bodies. `monthsCovered` = distinct months among `MONTHLY` entries; `officialPct` stays 100 by policy.
+
+**Pattern:** `FieldNoteCard` omits the readTime line when passed an empty string (`{readTime && ...}`); the guides index passes `readTime=""` deliberately.
+**Context:** readTime format is canonical `"N min read"` (words ÷ 200, rounded up). The component default is `"5 min read"`.
+
+**Pattern:** Section index pages and About use a reusable `.section-hero` / `.about-hero` radial glow built from dedicated tokens in `global.css`.
+**Context:** The hero needs `overflow: clip`/`visible` so the glow can fade past its edges. Helper tokens include `--bar-bg` and `--tag-bg`.
+
+**Pattern:** Site shell max-width is 1280px; article content stays at 720px.
+**Context:** Increased from 1200px to give the card grid breathing room. Don't reintroduce 1200 in components or docs.
+
+**Pattern:** `skills/SKILL-brand.md` is the single source of truth for brand voice, the 12 banned words, readTime format, and metadata vocabulary.
+**Context:** The Squad `brand-voice` skill, Harper's charter, and docs mirror it. If they diverge, update them to match SKILL-brand.md.

@@ -20,7 +20,7 @@
 
 - Field Notes: 300-600 words, structured as Context → Observation → Implication → Related
 - Use Cases: 600-1200 words, structured as Scenario → Problem → Approach → Outcome
-- News: a curated index of official Microsoft Copilot announcements that links out to the source. Maintained by appending entries to `src/data/news.ts` (one-sentence summaries), not internal articles. Follow SKILL-news-curator.md.
+- News: a curated index of official Microsoft Copilot announcements that links out to the source. Maintained by appending entries to `src/data/news.ts` (one-sentence summaries), not internal articles. Follow SKILL-news-curator.md — including the `NEWS_META` rules (`monthsCovered` = distinct months / `MONTHLY` entries; `officialPct` stays 100).
 - Always reference SKILL-brand.md for voice and banned words
 - Frontmatter must match the Zod schema exactly
 - No placeholder content — every draft is publishable quality

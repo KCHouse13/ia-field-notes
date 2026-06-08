@@ -7,7 +7,7 @@ source: "manual"
 ---
 
 ## Context
-Every piece of content on IA Field Notes must follow strict brand voice rules. This skill mirrors the rules in `skills/SKILL-brand.md` for quick reference by all agents.
+Every piece of content on IA Field Notes must follow strict brand voice rules. This skill mirrors the rules in `skills/SKILL-brand.md` for quick reference by all agents. **`skills/SKILL-brand.md` is the source of truth** — if anything here ever diverges (banned words, formatting, metadata vocabulary), update this file to match it.
 
 ## Patterns
 

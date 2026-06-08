@@ -28,6 +28,9 @@ IA Field Notes has a structured content pipeline. Content is written by Sawyer o
 | Guides | Quinn | SKILL-guide-builder.md | src/content/guides/ |
 | Prompt Library | Quinn | SKILL-prompt-library.md | src/content/prompt-library/ |
 
+> Ownership by file pattern is canonical in `.squad/routing.md`. News is a typed data module (`src/data/news.ts`), not a content collection.
+> **Wide/interactive guides:** a guide with `width: wide` in frontmatter renders through `GuideWideLayout` and wraps one bespoke component in `src/components/guides/`. Quinn owns the content; Mercer owns the component code. See SKILL-guide-builder.md.
+
 ### File naming
 - Use kebab-case slugs: `my-observation-title.md`
 - Guides and prompt library use `.mdx` extension

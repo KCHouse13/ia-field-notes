@@ -77,6 +77,36 @@
 **What:** Site max-width increased from 1200px to 1280px. Content max-width remains 720px for articles.
 **Why:** Extra width accommodates the new card grid layout and gives the design more breathing room on large screens.
 
+### 2026-06-07: News reworked into a typed data module
+**By:** Finch, Sawyer
+**What:** News is no longer a content collection. It lives in `src/data/news.ts` as a typed, link-out roll-up (one-sentence summaries pointing to official sources) with no internal article bodies. The old `src/content/news/` collection and internal `/news/[slug]` article route were removed; the News page derives `NEWS_META` (monthsCovered, officialPct) from the data.
+**Why:** The value of News here is a credible, current index of official Microsoft Copilot announcements, not original articles. A typed data module is simpler to maintain and keeps the section honest (everything links to a primary source).
+
+### 2026-06-07: Wide/interactive guide pattern
+**By:** Finch, Mercer, Quinn
+**What:** The `guides` schema gained a `width` enum (`standard` | `wide`, default `standard`). `src/pages/guides/[...slug].astro` renders `wide` guides with `GuideWideLayout` (full-bleed) and everything else with `PostLayout`. A wide guide is a thin MDX shell that wraps one bespoke component in `src/components/guides/` (first example: `CopilotChatBasicGuide.astro`).
+**Why:** Some guides need richer, full-width interactive layouts that don't fit the 720px article column. Keeping the interactive code in a dedicated component (Mercer) while Quinn owns the guide content preserves the editorial workflow.
+
+### 2026-06-07: CategoryTile component for section navigation
+**By:** Mercer
+**What:** Added a `CategoryTile.astro` component (title, description, href, optional icon, optional countText) used for section/category navigation on index pages.
+**Why:** The homepage and section pages needed a consistent, accessible navigation card distinct from `FieldNoteCard` (which is for individual posts).
+
+### 2026-06-07: Section-hero radial glow and tokens
+**By:** Mercer
+**What:** Introduced a reusable `.section-hero` / `.about-hero` radial-glow treatment driven by dedicated tokens in `src/styles/global.css` (plus helpers like `--bar-bg`, `--tag-bg`). Applied across section index pages and the About page. Heroes use `overflow: clip`/`visible` so the glow fades past the edges.
+**Why:** Gives section landing pages a distinctive, consistent visual identity without per-page bespoke CSS.
+
+### 2026-06-07: Footer and card polish
+**By:** Mercer
+**What:** Simplified the Footer (removed the redundant brand-name block and the last-updated bar). Removed the News last-updated stamp. `FieldNoteCard` omits the readTime line when it's empty, and the guides index passes an empty readTime intentionally.
+**Why:** Reduces visual noise and removes metadata that was inaccurate or low-value, keeping the layout focused on content.
+
+### 2026-06-07: SKILL-brand.md is the canonical brand SSOT
+**By:** Harper
+**What:** `skills/SKILL-brand.md` is the single source of truth for brand voice, the 12 banned words, the `readTime` format (`"N min read"`), and content metadata vocabulary. The Squad `brand-voice` skill, Harper's charter, and the docs mirror it; if they diverge, they are updated to match SKILL-brand.md.
+**Why:** Multiple copies of the banned-word list and formatting rules had started to drift. Naming one canonical file prevents conflicting guidance.
+
 ## Governance
 
 - All meaningful changes require team consensus

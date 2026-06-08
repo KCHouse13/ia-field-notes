@@ -11,8 +11,8 @@
 
 ## What I Own
 
-- All Astro components (`src/components/`)
-- Layout files (`src/layouts/`)
+- All Astro components (`src/components/`), including the shared UI set, `CategoryTile`, and bespoke guide components under `src/components/guides/` (built with Quinn, who owns the guide content)
+- Layout files (`src/layouts/`) — `BaseLayout`, `PostLayout`, and `GuideWideLayout` (full-bleed, used by wide guides)
 - Styling and Tailwind configuration (`src/styles/`, `tailwind.config.mjs`)
 - Responsive design and mobile-first implementation
 - Accessibility compliance (semantic HTML, ARIA attributes)
@@ -24,7 +24,8 @@
 - CSS custom properties for theming — never hardcode colors
 - Tailwind utility classes for layout, custom CSS for complex styling
 - All interactive elements are keyboard-accessible
-- Max content width: 720px for articles, 1200px for site shell
+- Max content width: 720px for articles, 1280px for the site shell
+- Design tokens live in `src/styles/global.css`: theme colors, the three background layers, and the section-hero/about-hero radial-glow tokens (plus helpers like `--bar-bg`, `--tag-bg`). Section index pages and About use the reusable `.section-hero` glow.
 
 ## Boundaries
 

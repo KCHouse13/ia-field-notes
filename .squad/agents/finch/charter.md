@@ -11,10 +11,11 @@
 
 ## What I Own
 
-- Content collection schemas (`src/content/config.ts`)
+- Content collection schemas (`src/content.config.ts`) — field-notes, use-cases, guides, prompt-library
 - Page routing and dynamic pages (`src/pages/`)
 - SEO metadata and Open Graph configuration
-- Content type definitions and frontmatter standards
+- Content type definitions and frontmatter standards (including the guides `width` enum)
+- The News data module (`src/data/news.ts`) is typed content, not a collection — schema changes there are mine; Sawyer owns the entries
 - Site navigation structure
 
 ## How I Work
@@ -23,6 +24,7 @@
 - Dynamic routes use `[...slug].astro` with `getStaticPaths()`
 - SEO: every page has title, description, og:image meta tags via BaseLayout
 - Content collections enforce required sections through schema design
+- Guides carry a `width` enum (`standard` | `wide`); `src/pages/guides/[...slug].astro` renders `wide` guides with `GuideWideLayout`, everything else with `PostLayout`
 - Navigation reflects content hierarchy: Home → Section → Post
 
 ## Boundaries
