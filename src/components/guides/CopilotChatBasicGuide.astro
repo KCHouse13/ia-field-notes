@@ -49,18 +49,18 @@ const IMG = '/images/guides/copilot-chat-basic';
       </p>
 
       <div class="callout callout-note fade-in" style="max-width:700px; margin-left:auto; margin-right:auto;">
-        <div class="callout-title"><svg class="cgb-edp-shield" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M12 2.2 4.5 5.1v6.1c0 4.6 3.2 8.9 7.5 10.6 4.3-1.7 7.5-6 7.5-10.6V5.1L12 2.2Z" fill="#107c41"/><path d="m8.6 12.1 2.3 2.3 4.5-4.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Enterprise Data Protection</div>
+        <div class="callout-title cgb-edp-title">Enterprise Data Protection <svg class="cgb-edp-shield" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M12 2.2 4.5 5.1v6.1c0 4.6 3.2 8.9 7.5 10.6 4.3-1.7 7.5-6 7.5-10.6V5.1L12 2.2Z" fill="#107c41"/><path d="m8.6 12.1 2.3 2.3 4.5-4.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         When you see the <strong>green shield icon</strong> in Copilot Chat, it means EDP is applied. Prompts and responses are processed within the Microsoft 365 service boundary, and they are not used to train foundation models, including work content you add or upload.
       </div>
 
       <h3 style="font-size:1.2rem; margin:2rem 0 1rem;" class="fade-in">Where to access Copilot Chat</h3>
       <div class="access-grid fade-in">
-        <a href="https://m365copilot.com" target="_blank" rel="noopener" class="access-item"><span class="access-icon">🌐</span><span>m365copilot.com <span style="color:var(--text-meta);font-size:0.78rem;">(primary web)</span></span><span class="access-action">Open →</span></a>
-        <div class="access-item" onclick="openLightbox('copilot-edge-sidebar.png','Copilot Chat in Microsoft Edge — open the sidebar to access Chat alongside any webpage')"><span class="access-icon">🔲</span><span>Microsoft Edge sidebar</span><span class="access-action">Preview</span></div>
-        <div class="access-item" onclick="openLightbox('copilot-outlook.png','Copilot Chat in Outlook — available in the side pane alongside your email')"><span class="access-icon">📧</span><span>Outlook (left nav / side pane)</span><span class="access-action">Preview</span></div>
-        <div class="access-item" onclick="openLightboxQR()"><span class="access-icon">📱</span><span>Mobile app (iOS &amp; Android)</span><span class="access-action">QR Code</span></div>
-        <div class="access-item" onclick="openLightboxTeams()"><span class="access-icon">💬</span><span>Teams (left nav)</span><span class="access-action">Preview</span></div>
-        <div class="access-item" onclick="openLightbox('copilot-desktop-app.png','M365 Copilot desktop app — look for the Copilot icon in your Windows taskbar','desktop')"><span class="access-icon">💻</span><span>M365 Copilot desktop app</span><span class="access-action">Preview</span></div>
+        <a href="https://m365copilot.com" target="_blank" rel="noopener" class="access-item"><span class="access-icon">🌐</span><span class="access-title">m365copilot.com</span><span class="access-sub">(primary web)</span><span class="access-action">Open</span></a>
+        <div class="access-item" onclick="openLightbox('copilot-edge-sidebar.png','Copilot Chat in Microsoft Edge — open the sidebar to access Chat alongside any webpage')"><span class="access-icon">🔲</span><span class="access-title">Microsoft Edge</span><span class="access-sub">(sidebar)</span><span class="access-action">Preview</span></div>
+        <div class="access-item" onclick="openLightbox('copilot-outlook.png','Copilot Chat in Outlook — available in the side pane alongside your email')"><span class="access-icon">📧</span><span class="access-title">Outlook</span><span class="access-sub">(left nav / side pane)</span><span class="access-action">Preview</span></div>
+        <div class="access-item" onclick="openLightboxQR()"><span class="access-icon">📱</span><span class="access-title">Mobile app</span><span class="access-sub">(iOS &amp; Android)</span><span class="access-action">QR Code</span></div>
+        <div class="access-item" onclick="openLightboxTeams()"><span class="access-icon">💬</span><span class="access-title">Teams</span><span class="access-sub">(left nav)</span><span class="access-action">Preview</span></div>
+        <div class="access-item" onclick="openLightbox('copilot-desktop-app.png','M365 Copilot desktop app — look for the Copilot icon in your Windows taskbar','desktop')"><span class="access-icon">💻</span><span class="access-title">M365 Copilot</span><span class="access-sub">(desktop app)</span><span class="access-action">Preview</span></div>
       </div>
 
       <div class="guide-hero-image fade-in" onclick="openLightbox('copilot-chat-annotated.png','Copilot Chat interface — click or pinch to zoom into the 14 annotated features')" style="cursor:pointer;" title="Click to enlarge">
@@ -1240,20 +1240,26 @@ const IMG = '/images/guides/copilot-chat-basic';
   .callout-tip { background: var(--callout-tip-bg); border-color: var(--callout-tip-border); }
   .callout-warn { background: var(--callout-warn-bg); border-color: var(--callout-warn-border); }
   .callout-title { font-weight: 600; margin-bottom: 0.2rem; }
-  .cgb-edp-shield { vertical-align: -4px; margin-right: 0.15rem; }
+  .cgb-edp-title { display: flex; align-items: center; gap: 0.4rem; }
+  .cgb-edp-shield { flex-shrink: 0; }
 
   /* ── Access grid ── */
   .access-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: clamp(0.65rem, 1.2vw, 0.9rem);
     margin: 1.5rem 0;
   }
   .access-item {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    padding: 0.75rem 1rem;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "icon title title"
+      "icon sub   action";
+    align-content: center;
+    column-gap: 0.7rem;
+    row-gap: 0.12rem;
+    padding: 0.85rem 1rem;
     background: var(--bg-surface);
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -1265,25 +1271,22 @@ const IMG = '/images/guides/copilot-chat-basic';
   }
   .access-item:hover { border-color: var(--accent); background: var(--accent-subtle); }
   .access-item .access-action {
-    margin-left: auto;
-    font-size: 0.7rem;
-    font-weight: 500;
+    grid-area: action;
+    justify-self: end;
+    align-self: start;
+    padding-left: 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.3;
     color: var(--accent);
     white-space: nowrap;
-    opacity: 0.5;
-    transition: opacity 0.2s;
+    opacity: 0.7;
+    transition: opacity 0.2s, transform 0.2s;
   }
-  .access-item:hover .access-action { opacity: 1; }
-  .access-item::after {
-    content: '›';
-    font-size: 1.2rem;
-    color: var(--text-meta);
-    margin-left: auto;
-    transition: transform 0.2s, color 0.2s;
-    flex-shrink: 0;
-  }
-  .access-item:hover::after { transform: translateX(3px); color: var(--accent); }
-  .access-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .access-item:hover .access-action { opacity: 1; transform: translateX(2px); }
+  .access-icon { grid-area: icon; align-self: center; font-size: 1.5rem; line-height: 1; }
+  .access-title { grid-area: title; align-self: end; font-weight: 600; line-height: 1.25; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .access-sub { grid-area: sub; align-self: start; color: var(--text-meta); font-size: 0.78rem; line-height: 1.3; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* ── Lightbox (static shell) ── */
   .lightbox-overlay {
@@ -1432,25 +1435,33 @@ const IMG = '/images/guides/copilot-chat-basic';
   .capability-card.open { border-left: 3px solid var(--accent); }
   .capabilities-grid.two-col { grid-template-columns: repeat(2, 1fr); }
   .capability-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 1.1rem 1.25rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "icon title expand"
+      "desc desc  desc";
+    align-items: center;
+    column-gap: 0.55rem;
+    row-gap: 0.3rem;
+    padding: 0.85rem 1rem;
     cursor: pointer;
     user-select: none;
   }
-  .capability-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
-  .capability-info { flex: 1; min-width: 0; }
+  .capability-icon { grid-area: icon; font-size: 1.25rem; line-height: 1; }
+  .capability-info { display: contents; }
   .capability-info h4 {
+    grid-area: title;
     font-family: var(--font-body);
     font-size: 0.95rem;
     font-weight: 600;
-    margin-bottom: 0.2rem;
+    margin: 0;
+    min-width: 0;
   }
-  .capability-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+  .capability-desc { grid-area: desc; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin: 0; }
   .expand-icon {
-    width: 24px;
-    height: 24px;
+    grid-area: expand;
+    width: 22px;
+    height: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1873,7 +1884,6 @@ const IMG = '/images/guides/copilot-chat-basic';
     .cgb-container { padding: 0 1.25rem; }
     section { padding: 2.5rem 0; }
     .cgb-hero { padding: 4rem 0 3rem; }
-    .access-grid { grid-template-columns: repeat(2, 1fr); }
     .checklist { grid-template-columns: 1fr; }
     .capabilities-grid { grid-template-columns: 1fr; }
     .capabilities-grid.two-col { grid-template-columns: 1fr; }
@@ -1881,7 +1891,18 @@ const IMG = '/images/guides/copilot-chat-basic';
   }
   @media (max-width: 480px) {
     .cgb-hero-ctas { flex-direction: column; align-items: center; }
-    .access-grid { grid-template-columns: 1fr; }
+    .access-item {
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-areas:
+        "icon title"
+        "icon sub"
+        "action action";
+    }
+    .access-item .access-action {
+      justify-self: end;
+      margin-top: 0.35rem;
+      padding-left: 0;
+    }
     .resources-grid { grid-template-columns: 1fr; }
   }
 </style>
