@@ -329,13 +329,9 @@ const IMG = '/images/guides/copilot-chat-basic';
             <div class="capability-detail"><div class="capability-detail-inner">
               <div class="prompt-example"><span class="prompt-label">Try this prompt:</span><div class="prompt-text" onclick="copyPrompt(this)">Summarize the key decisions from today's channel planning thread and list any action items assigned to me<span class="copy-hint">Click to copy</span></div></div>
               <div class="capability-images">
-                <div class="cap-img-item" onclick="openLightbox('copilot-teams-closed.png','Copilot Chat in Teams — sidebar closed, click the Copilot icon in the left nav to open')">
-                  <img src={`${IMG}/copilot-teams-closed.png`} alt="Teams with Copilot Chat sidebar closed" loading="lazy" />
-                  <div class="cap-img-label">Sidebar closed</div>
-                </div>
-                <div class="cap-img-item" onclick="openLightbox('copilot-teams-open.png','Copilot Chat in Teams — sidebar open showing agents, chats, and prompt area')">
-                  <img src={`${IMG}/copilot-teams-open.png`} alt="Teams with Copilot Chat sidebar open" loading="lazy" />
-                  <div class="cap-img-label">Sidebar open</div>
+                <div class="cap-img-item cap-img-wide" onclick="openLightbox('copilot-teams-open-and-closed.png','Copilot Chat in Teams - click the Copilot icon in the left nav to open or collapse the Copilot Chat pane')">
+                  <img src={`${IMG}/copilot-teams-open-and-closed.png`} alt="Teams showing the Copilot icon in the left nav and the Copilot Chat pane open" loading="lazy" />
+                  <div class="cap-img-label">Open and collapse Copilot Chat from the Teams left nav</div>
                 </div>
               </div>
             </div></div>
@@ -401,8 +397,13 @@ const IMG = '/images/guides/copilot-chat-basic';
               <div class="expand-icon">+</div>
             </div>
             <div class="capability-detail"><div class="capability-detail-inner">
-              <p style="font-size:0.88rem;color:var(--text-secondary);margin-top:0.75rem;">Open the sidebar in Copilot Chat to explore the agent catalog — prebuilt agents for specialized tasks like research, writing, and data analysis.</p>
-              <div class="screenshot-placeholder"><span class="ss-icon">📸</span>Agent catalog in sidebar</div>
+              <p style="font-size:0.88rem;color:var(--text-secondary);margin-top:0.75rem;">Open <strong>More agents</strong> in Copilot Chat to explore the Agent Store. Start with your pinned app agents, then browse Microsoft-built agents for specialized tasks like research, planning, writing, and learning.</p>
+              <div class="capability-images">
+                <div class="cap-img-item cap-img-wide" onclick="openLightbox('browse-agents.png','Agent Store - browse your app agents and Microsoft-built agents from More agents')">
+                  <img src={`${IMG}/browse-agents.png`} alt="Agent Store showing search, your agents, and Microsoft-built agent cards" loading="lazy" />
+                  <div class="cap-img-label">Agent Store from More agents</div>
+                </div>
+              </div>
             </div></div>
           </div>
 
@@ -413,7 +414,23 @@ const IMG = '/images/guides/copilot-chat-basic';
               <div class="expand-icon">+</div>
             </div>
             <div class="capability-detail"><div class="capability-detail-inner">
-              <p style="font-size:0.88rem;color:var(--text-secondary);margin-top:0.75rem;">Access specialized agents for Word, Excel, and PowerPoint directly from the Microsoft 365 Copilot app to assist with document creation, data analysis, and presentations.</p>
+              <p style="font-size:0.88rem;color:var(--text-secondary);margin-top:0.75rem;">Access specialized agents for Word, Excel, and PowerPoint directly from the Microsoft 365 Copilot app. These agents can clarify your intent, generate a draft artifact, and hand it off to the full Office app when you are ready to keep editing.</p>
+              <div class="capability-images app-agent-images">
+                <div class="cap-img-item" onclick="openLightbox('app-agent-powerpoint.png','PowerPoint agent - choose presentation options, generate a deck preview, then open it in PowerPoint')">
+                  <img src={`${IMG}/app-agent-powerpoint.png`} alt="PowerPoint agent showing presentation options, a generated deck preview, and Open in PowerPoint" loading="lazy" />
+                  <div class="cap-img-label">PowerPoint agent: draft a presentation</div>
+                </div>
+                <div class="cap-img-item" onclick="openLightbox('app-agent-excel.png','Excel agent - provide workbook instructions, review reasoning, then open the generated workbook in Excel')">
+                  <img src={`${IMG}/app-agent-excel.png`} alt="Excel agent workflow showing prompt, workbook options, reasoning, generated dashboard, and Open in Excel" loading="lazy" />
+                  <div class="cap-img-label">Excel agent: build a workbook</div>
+                </div>
+              </div>
+              <div class="callout callout-note" style="margin-top:1rem;">
+                <div class="callout-title">Note</div>App agents may ask follow-up questions before generating the file. Use those options to specify the audience, purpose, source data, timeframe, analysis type, and preferred output style.
+              </div>
+              <div class="callout callout-tip" style="margin-top:1rem;">
+                <div class="callout-title">Tip</div>Treat the generated deck or workbook as a strong first draft. Review the content, verify facts and formulas, then use <strong>Open in PowerPoint</strong> or <strong>Open in Excel</strong> to continue editing in the app.
+              </div>
             </div></div>
           </div>
 
@@ -428,7 +445,7 @@ const IMG = '/images/guides/copilot-chat-basic';
           <div class="capability-card fade-in">
             <div class="capability-header" onclick="toggleCapability(this)">
               <div class="capability-icon">🔎</div>
-              <div class="capability-info"><h4>Universal Search</h4><p class="capability-desc">AI-powered search across all your Microsoft 365 data and connected sources</p></div>
+              <div class="capability-info"><h4>Universal Search</h4><p class="capability-desc">Search across all your Microsoft 365 data and connected sources</p></div>
               <div class="expand-icon">+</div>
             </div>
             <div class="capability-detail"><div class="capability-detail-inner">
@@ -742,13 +759,13 @@ const IMG = '/images/guides/copilot-chat-basic';
       <div class="cheat-sheet fade-in">
         <h3>Quick-reference cheat sheet</h3>
         <ol>
-          <li>📏 <strong>Length matters</strong> — 25-30 words is the sweet spot. Too short = generic results. Too long = Copilot may miss instructions.</li>
-          <li>🧩 <strong>Break it down</strong> — Multi-step prompts beat single complex ones. Review and refine between steps.</li>
-          <li>🎭 <strong>Assign a persona</strong> — "Act as a..." instantly sets expertise level and tone.</li>
-          <li>❓ <strong>Ask what it needs</strong> — When stuck, ask Copilot what context would help most.</li>
-          <li>🔗 <strong>Think end-to-end</strong> — Don't just create a table of action items; write the whole follow-up email that includes the table.</li>
-          <li>🧪 <strong>Experiment</strong> — Try different structures, tones, and follow-ups. Curiosity reveals new capability.</li>
-          <li>🔄 <strong>Iterate always</strong> — Your first result is a draft, not a final answer. Refine, adjust, repeat.</li>
+          <li><strong>Length matters</strong> — 25-30 words is the sweet spot. Too short = generic results. Too long = Copilot may miss instructions.</li>
+          <li><strong>Break it down</strong> — Multi-step prompts beat single complex ones. Review and refine between steps.</li>
+          <li><strong>Assign a persona</strong> — "Act as a..." instantly sets expertise level and tone.</li>
+          <li><strong>Ask what it needs</strong> — When stuck, ask Copilot what context would help most.</li>
+          <li><strong>Think end-to-end</strong> — Don't just create a table of action items; write the whole follow-up email that includes the table.</li>
+          <li><strong>Experiment</strong> — Try different structures, tones, and follow-ups. Curiosity reveals new capability.</li>
+          <li><strong>Iterate always</strong> — Your first result is a draft, not a final answer. Refine, adjust, repeat.</li>
         </ol>
       </div>
 
@@ -1474,24 +1491,38 @@ const IMG = '/images/guides/copilot-chat-basic';
   .capability-card.open .expand-icon { transform: rotate(45deg); }
   .capability-detail { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
   .capability-detail-inner { padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--border); }
-  .collapse-btn {
+  :global(.collapse-btn) {
     display: none;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    padding: 0.55rem;
-    margin-top: 1rem;
-    background: var(--bg-raised);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-secondary);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    gap: 0.75rem;
+    padding: 0.45rem 0 0;
+    margin: 1rem auto 0;
+    background: transparent;
+    border: 0;
+    color: var(--text-meta);
+    font-family: var(--font-body);
+    font-size: 0.76rem;
+    font-weight: 400;
+    line-height: 1;
+    text-transform: lowercase;
     cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
+    transition: color 0.2s;
   }
-  .collapse-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .capability-card.open .collapse-btn { display: block; }
+  :global(.collapse-btn)::before,
+  :global(.collapse-btn)::after {
+    content: '';
+    height: 1px;
+    max-width: 5rem;
+    flex: 1;
+    background: color-mix(in srgb, var(--border) 70%, transparent);
+    transition: background 0.2s;
+  }
+  :global(.collapse-btn:hover) { color: var(--text-secondary); }
+  :global(.collapse-btn:hover)::before,
+  :global(.collapse-btn:hover)::after { background: color-mix(in srgb, var(--text-meta) 45%, transparent); }
+  .capability-card.open :global(.collapse-btn) { display: flex; }
   .prompt-example { margin-top: 0.75rem; }
   .prompt-label {
     font-family: var(--font-mono);
@@ -1512,24 +1543,33 @@ const IMG = '/images/guides/copilot-chat-basic';
     line-height: 1.55;
     cursor: pointer;
     position: relative;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
   }
-  .prompt-text:hover { border-color: var(--accent); }
+  .prompt-text:hover { background: var(--bg-surface); border-color: var(--accent); box-shadow: 0 2px 12px rgba(37,99,235,0.10); }
   .copy-hint {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    margin: 0.65rem 0 0 auto;
+    padding: 0.28rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg-surface);
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
     color: var(--text-secondary);
-    margin-top: 0.35rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    line-height: 1;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
   }
-  .copy-hint::before { content: '📋 '; }
-  .prompt-text:hover .copy-hint { color: var(--accent); }
+  .prompt-text:hover .copy-hint { background: color-mix(in srgb, var(--accent) 9%, var(--bg-surface)); border-color: color-mix(in srgb, var(--accent) 38%, var(--border)); color: var(--accent); }
   .capability-detail .screenshot-placeholder { aspect-ratio: 16 / 9; padding: 2rem; margin-top: 0.75rem; }
 
   .capability-images { display: flex; gap: 0.75rem; margin-top: 0.75rem; flex-wrap: wrap; }
   .capability-images .cap-img-item { flex: 1; min-width: 140px; text-align: center; cursor: pointer; }
+  .capability-images .cap-img-wide { min-width: 100%; }
+  .app-agent-images .cap-img-item { min-width: min(100%, 18rem); }
   .capability-images .cap-img-item img {
     width: 100%;
     height: auto;
@@ -2047,17 +2087,8 @@ REQUESTED BUYER ACTIONS
 
     window.openLightboxTeams = function () {
       const html =
-        '<div class="lightbox-multi">' +
-          '<div class="lightbox-multi-item">' +
-            '<img src="' + resolveSrc('copilot-teams-closed.png') + '" alt="Teams with Copilot Chat sidebar closed">' +
-            '<div class="lightbox-multi-label">Sidebar closed</div>' +
-          '</div>' +
-          '<div class="lightbox-multi-item">' +
-            '<img src="' + resolveSrc('copilot-teams-open.png') + '" alt="Teams with Copilot Chat sidebar open showing agents and chats">' +
-            '<div class="lightbox-multi-label">Sidebar open</div>' +
-          '</div>' +
-        '</div>';
-      openOverlay(html, 'Copilot Chat in Teams — click the Copilot icon in the left nav to toggle the sidebar');
+        '<img src="' + resolveSrc('copilot-teams-open-and-closed.png') + '" alt="Teams with the Copilot Chat pane closed and open" style="display:block;max-width:90vw;max-height:80vh;object-fit:contain;">';
+      openOverlay(html, 'Copilot Chat in Teams - click the Copilot icon in the left nav to open or collapse the sidebar');
     };
 
     function closeOverlay() {
@@ -2122,7 +2153,9 @@ REQUESTED BUYER ACTIONS
     root.querySelectorAll('.capability-detail-inner').forEach(function (inner) {
       const btn = document.createElement('button');
       btn.className = 'collapse-btn';
-      btn.textContent = '▲ Collapse';
+      btn.type = 'button';
+      btn.textContent = 'collapse';
+      btn.setAttribute('aria-label', 'Collapse card');
       btn.addEventListener('click', function () {
         const card = inner.closest('.capability-card');
         window.toggleCapability(card.querySelector('.capability-header'));
@@ -2149,7 +2182,7 @@ REQUESTED BUYER ACTIONS
       const hint = el.querySelector('.copy-hint');
       function done() {
         showToast('Copied!');
-        if (hint) { hint.textContent = 'Copied ✓'; setTimeout(function () { hint.textContent = 'Click to copy'; }, 1500); }
+        if (hint) { hint.textContent = 'Copied'; setTimeout(function () { hint.textContent = 'Click to copy'; }, 1500); }
       }
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(done).catch(fallback);
